@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>PrintKraft Admin — Vận hành hệ thống</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --graphite:#1E2430;
+    --panel:#262E3D;
+    --bg:#F5F6F8;
+    --cobalt:#3B5BDB;
+    --green:#2F9E44;
+    --amber:#E8590C;
+    --red:#E03131;
+    --line:#E3E5EA;
+    --text:#1E2430;
+    --muted:#6B7280;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:14px;
+  }
+  .num, .mono{font-family:'IBM Plex Mono', monospace;}
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit; cursor:pointer;}
+
+  .layout{display:grid; grid-template-columns:236px 1fr; min-height:100vh;}
+
+  /* ===== Sidebar ===== */
+  .sidebar{
+    background:var(--graphite);
+    color:rgba(255,255,255,0.7);
+    padding:22px 16px;
+    display:flex; flex-direction:column;
+    position:sticky; top:0; height:100vh; overflow-y:auto;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    color:white; font-weight:600; font-size:15px;
+    padding:0 8px 24px;
+  }
+  .brand .sq{width:20px; height:20px; background:var(--cobalt); border-radius:5px;}
+  .nav-group{margin-bottom:22px;}
+  .nav-label{
+    font-size:11px; text-transform:uppercase; letter-spacing:0.06em;
+    color:rgba(255,255,255,0.35); padding:0 8px 8px; font-weight:600;
+  }
+  .nav-item{
+    display:flex; align-items:center; gap:10px;
+    padding:9px 10px; border-radius:8px; font-size:13.5px; font-weight:500;
+    margin-bottom:2px; cursor:pointer;
+  }
+  .nav-item .ic{width:16px; text-align:center; opacity:0.8;}
+  .nav-item:hover{background:rgba(255,255,255,0.06); color:white;}
+  .nav-item.active{background:var(--cobalt); color:white;}
+  .sidebar-foot{
+    margin-top:auto; border-top:1px solid rgba(255,255,255,0.1); padding-top:16px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .avatar{width:32px; height:32px; border-radius:50%; background:var(--cobalt); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; color:white;}
+  .sidebar-foot div strong{display:block; color:white; font-size:13px;}
+  .sidebar-foot div span{font-size:11.5px; color:rgba(255,255,255,0.4);}
+
+  /* ===== Main ===== */
+  .main{display:flex; flex-direction:column; min-width:0;}
+  .topbar{
+    height:64px; background:white; border-bottom:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 28px; flex-shrink:0; gap:16px; flex-wrap:wrap;
+  }
+  .topbar h1{font-size:17px; font-weight:600;}
+  .topbar .sub{font-size:12px; color:var(--muted); margin-top:1px;}
+  .topbar-right{display:flex; align-items:center; gap:14px;}
+  .search-box{
+    background:var(--bg); border:1px solid var(--line); border-radius:8px;
+    padding:8px 12px; font-size:13px; width:260px; color:var(--text); outline:none;
+  }
+  .search-box:focus{border-color:var(--cobalt);}
+  .icon-btn{
+    width:36px; height:36px; border-radius:8px; background:var(--bg);
+    display:flex; align-items:center; justify-content:center; font-size:15px;
+    border:1px solid var(--line); position:relative; cursor:pointer;
+  }
+  .icon-btn .dot{position:absolute; top:6px; right:7px; width:6px; height:6px; background:var(--red); border-radius:50%;}
+
+  .content{padding:26px 28px; flex:1;}
+
+  /* alert banner */
+  .alert{
+    display:flex; align-items:center; gap:12px;
+    background:#FFF4E6; border:1px solid #FFD8A8; color:#8A4A00;
+    padding:12px 16px; border-radius:10px; font-size:13px; margin-bottom:22px;
+  }
+  .alert strong{font-weight:600;}
+  .alert a{margin-left:auto; font-weight:600; border-bottom:1.5px solid #8A4A00; cursor:pointer;}
+
+  /* KPI row */
+  .kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px;}
+  .kpi{
+    background:white; border:1px solid var(--line); border-radius:12px; padding:18px 20px;
+  }
+  .kpi .label{font-size:12.5px; color:var(--muted); margin-bottom:10px; display:flex; justify-content:space-between;}
+  .kpi .value{font-size:26px; font-weight:600;}
+  .kpi .delta{font-size:12px; margin-top:8px; display:flex; align-items:center; gap:4px;}
+  .delta.up{color:var(--green);}
+  .delta.down{color:var(--red);}
+
+  /* two-col */
+  .cols{display:grid; grid-template-columns:1.6fr 1fr; gap:18px; align-items:start;}
+
+  .panel{
+    background:white; border:1px solid var(--line); border-radius:12px; overflow:hidden;
+  }
+  .panel-head{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:16px 20px; border-bottom:1px solid var(--line);
+  }
+  .panel-head h3{font-size:14.5px; font-weight:600;}
+  .panel-head a{font-size:12.5px; color:var(--cobalt); font-weight:500; cursor:pointer;}
+  .tabs{display:flex; gap:4px; padding:12px 20px 0; flex-wrap:wrap;}
+  .tab{padding:7px 12px; font-size:12.5px; font-weight:500; border-radius:7px; color:var(--muted); cursor:pointer;}
+  .tab.active{background:var(--bg); color:var(--text);}
+
+  table{width:100%; border-collapse:collapse;}
+  th{
+    text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:0.04em;
+    color:var(--muted); font-weight:600; padding:10px 20px; border-bottom:1px solid var(--line);
+  }
+  td{padding:12px 20px; border-bottom:1px solid var(--line); font-size:13px; vertical-align:middle;}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:var(--bg);}
+  .order-id{font-family:'IBM Plex Mono'; font-size:12.5px; color:var(--muted);}
+  .pill{
+    display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:999px;
+    font-size:11.5px; font-weight:600; white-space:nowrap;
+  }
+  .pill.blue{background:#E7EBFD; color:var(--cobalt);}
+  .pill.green{background:#EBFBEE; color:var(--green);}
+  .pill.amber{background:#FFF4E6; color:var(--amber);}
+  .pill.red{background:#FFF0F0; color:var(--red);}
+  .pill.gray{background:var(--bg); color:var(--muted);}
+  .pill .dot{width:6px; height:6px; border-radius:50%; background:currentColor;}
+  .supplier-cell{display:flex; align-items:center; gap:8px;}
+  .supplier-cell .sq{width:24px; height:24px; border-radius:6px; background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; color:var(--muted);}
+  .action-link{color:var(--cobalt); font-weight:500; cursor:pointer; font-size:12.5px;}
+  .action-link:hover{text-decoration:underline;}
+
+  /* right col */
+  .list-item{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:13px 20px; border-bottom:1px solid var(--line); font-size:13px;
+  }
+  .list-item:last-child{border-bottom:none;}
+  .list-item .name{font-weight:500;}
+  .list-item .meta{font-size:11.5px; color:var(--muted); margin-top:2px;}
+  .bar-bg{background:var(--bg); height:6px; border-radius:999px; overflow:hidden; margin-top:4px; width:100px;}
+  .bar-fill{height:100%; background:var(--cobalt); border-radius:999px;}
+
+  .dispute-item{padding:13px 20px; border-bottom:1px solid var(--line); cursor:pointer;}
+  .dispute-item:last-child{border-bottom:none;}
+  .dispute-item:hover{background:var(--bg);}
+  .dispute-item .top{display:flex; justify-content:space-between; font-size:13px; font-weight:500; margin-bottom:4px;}
+  .dispute-item .desc{font-size:12px; color:var(--muted);}
+
+  /* chart */
+  .chart{display:flex; align-items:flex-end; gap:10px; height:150px; padding:0 20px 16px;}
+  .chart .bar{
+    flex:1; background:var(--cobalt); border-radius:6px 6px 0 0; position:relative;
+    transition:height .3s; min-height:4px;
+  }
+  .chart .bar:hover{background:var(--graphite);}
+  .chart .bar span{position:absolute; bottom:-20px; left:0; right:0; text-align:center; font-size:10.5px; color:var(--muted);}
+  .chart .bar .val{position:absolute; top:-20px; left:0; right:0; text-align:center; font-size:10.5px; font-weight:600; color:var(--text);}
+
+  /* tab content */
+  .tab-content{display:none;}
+  .tab-content.active{display:block;}
+
+  /* detail grid */
+  .detail-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:16px 20px;}
+  .detail-grid .field{background:var(--bg); border-radius:9px; padding:12px 14px;}
+  .detail-grid .field label{font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted); display:block; margin-bottom:4px;}
+  .detail-grid .field strong{font-size:14.5px; color:var(--text); font-weight:600;}
+
+  /* modal */
+  .overlay{position:fixed; inset:0; background:rgba(30,36,48,0.5); opacity:0; pointer-events:none; transition:.2s; z-index:90;}
+  .overlay.show{opacity:1; pointer-events:auto;}
+  .modal{
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:100;
+    opacity:0; pointer-events:none; transition:.2s; padding:20px;
+  }
+  .modal.show{opacity:1; pointer-events:auto;}
+  .modal-box{
+    background:white; border-radius:14px; padding:26px; width:600px; max-width:100%;
+    max-height:90vh; overflow-y:auto; position:relative;
+  }
+  .modal-box h3{font-size:20px; margin-bottom:6px;}
+  .modal-box .sub{font-size:13px; color:var(--muted); margin-bottom:20px;}
+  .modal-close{position:absolute; top:16px; right:18px; background:none; border:none; font-size:20px; color:var(--muted);}
+
+  /* toast */
+  .toast{
+    position:fixed; bottom:26px; left:50%; transform:translate(-50%,90px);
+    background:var(--graphite); color:white; padding:13px 24px; border-radius:10px;
+    font-size:13.5px; font-weight:500; z-index:200; transition:.25s; opacity:0;
+  }
+  .toast.show{transform:translate(-50%,0); opacity:1;}
+
+  /* btn */
+  .btn{
+    border:1px solid var(--line); background:white; border-radius:8px;
+    padding:9px 16px; font-size:13px; font-weight:500;
+  }
+  .btn:hover{background:var(--bg);}
+  .btn.primary{background:var(--cobalt); color:white; border-color:var(--cobalt);}
+  .btn.primary:hover{background:#2f4bc4;}
+  .btn.danger{background:var(--red); color:white; border-color:var(--red);}
+  .btn.danger:hover{background:#c92a2a;}
+
+  .toolbar{display:flex; gap:10px; padding:14px 20px; border-bottom:1px solid var(--line); flex-wrap:wrap; align-items:center;}
+  .toolbar input, .toolbar select{
+    border:1px solid var(--line); border-radius:8px; padding:8px 12px; font-size:13px; font-family:inherit; outline:none;
+  }
+  .toolbar input:focus, .toolbar select:focus{border-color:var(--cobalt);}
+
+  @media (max-width:1100px){
+    .layout{grid-template-columns:1fr;}
+    .sidebar{display:none;}
+    .kpi-row{grid-template-columns:repeat(2,1fr);}
+    .cols{grid-template-columns:1fr;}
+  }
+  @media (max-width:600px){
+    .kpi-row{grid-template-columns:1fr;}
+    .detail-grid{grid-template-columns:1fr;}
+    .topbar-right .search-box{width:160px;}
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="brand"><span class="sq"></span> PrintKraft Admin</div>
+
+    <div class="nav-group">
+      <div class="nav-label">Tổng quan</div>
+      <div class="nav-item active" onclick="switchPage(this,'dashboard')"><span class="ic">▤</span> Bảng điều khiển</div>
+      <div class="nav-item" onclick="switchPage(this,'reports')"><span class="ic">📈</span> Báo cáo &amp; Doanh thu</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Vận hành</div>
+      <div class="nav-item" onclick="switchPage(this,'orders')"><span class="ic">📦</span> Đơn hàng</div>
+      <div class="nav-item" onclick="switchPage(this,'suppliers')"><span class="ic">🏭</span> Xưởng in đối tác</div>
+      <div class="nav-item" onclick="switchPage(this,'disputes')"><span class="ic">⚠️</span> Tranh chấp <span style="margin-left:auto; background:var(--red); color:white; font-size:10px; padding:1px 6px; border-radius:999px;">4</span></div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Người dùng</div>
+      <div class="nav-item" onclick="switchPage(this,'buyers')"><span class="ic">🛍️</span> Người mua</div>
+      <div class="nav-item" onclick="switchPage(this,'staff')"><span class="ic">🧑‍💼</span> Nhân sự nội bộ</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Hệ thống</div>
+      <div class="nav-item" onclick="switchPage(this,'settings')"><span class="ic">⚙️</span> Cấu hình</div>
+      <div class="nav-item" onclick="switchPage(this,'logs')"><span class="ic">📜</span> Nhật ký hoạt động</div>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="avatar">TH</div>
+      <div><strong>Trần Hòa</strong><span>Quản trị viên</span></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <h1 id="pageTitle">Bảng điều khiển vận hành</h1>
+        <div class="sub" id="pageSub">Thứ Ba, 15 tháng 9, 2026</div>
+      </div>
+      <div class="topbar-right">
+        <input class="search-box" placeholder="Tìm đơn hàng, xưởng in, khách hàng...">
+        <div class="icon-btn" onclick="toast('Bạn có 3 thông báo mới')">🔔<span class="dot"></span></div>
+        <div class="icon-btn" onclick="toast('Hộp thư đến: 5 tin nhắn chưa đọc')">✉️</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ============ DASHBOARD ============ -->
+      <div class="tab-content active" id="page-dashboard">
+        <div class="alert">
+          <span>⚠️</span>
+          <span><strong>3 xưởng in</strong> đang trễ tiến độ giao hàng hơn 12 giờ so với cam kết.</span>
+          <a onclick="switchPageByName('disputes')">Xem chi tiết</a>
+        </div>
+
+        <div class="kpi-row">
+          <div class="kpi">
+            <div class="label">Doanh thu hôm nay</div>
+            <div class="value num">184,2 tr</div>
+            <div class="delta up">▲ 12,4% so với hôm qua</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Đơn hàng mới</div>
+            <div class="value num">342</div>
+            <div class="delta up">▲ 6,1%</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Tỉ lệ đúng hạn</div>
+            <div class="value num">94,3%</div>
+            <div class="delta down">▼ 1,8% tuần này</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Tranh chấp mở</div>
+            <div class="value num">4</div>
+            <div class="delta down">▲ 2 đơn mới</div>
+          </div>
+        </div>
+
+        <div class="cols" style="margin-bottom:18px;">
+          <div class="panel">
+            <div class="panel-head">
+              <h3>Doanh thu 7 ngày gần đây</h3>
+              <a onclick="toast('Đã xuất báo cáo doanh thu')">Xuất báo cáo</a>
+            </div>
+            <div class="chart">
+              <div class="bar" style="height:58%;"><span class="val">118tr</span><span>T2</span></div>
+              <div class="bar" style="height:72%;"><span class="val">142tr</span><span>T3</span></div>
+              <div class="bar" style="height:65%;"><span class="val">128tr</span><span>T4</span></div>
+              <div class="bar" style="height:88%;"><span class="val">171tr</span><span>T5</span></div>
+              <div class="bar" style="height:95%;"><span class="val">184tr</span><span>T6</span></div>
+              <div class="bar" style="height:78%;"><span class="val">152tr</span><span>T7</span></div>
+              <div class="bar" style="height:90%;"><span class="val">175tr</span><span>CN</span></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <h3>Phân bổ theo sản phẩm</h3>
+              <a onclick="toast('Đã mở báo cáo chi tiết')">Chi tiết</a>
+            </div>
+            <div class="list-item">
+              <div><div class="name">Áo thun &amp; Hoodie</div><div class="meta">142 đơn · 38%</div></div>
+              <div><div class="bar-bg"><div class="bar-fill" style="width:38%"></div></div></div>
+            </div>
+            <div class="list-item">
+              <div><div class="name">Cốc &amp; Bình giữ nhiệt</div><div class="meta">98 đơn · 26%</div></div>
+              <div><div class="bar-bg"><div class="bar-fill" style="width:26%"></div></div></div>
+            </div>
+            <div class="list-item">
+              <div><div class="name">Poster &amp; Canvas</div><div class="meta">62 đơn · 17%</div></div>
+              <div><div class="bar-bg"><div class="bar-fill" style="width:17%"></div></div></div>
+            </div>
+            <div class="list-item">
+              <div><div class="name">Bao bì &amp; Nhãn dán</div><div class="meta">48 đơn · 12%</div></div>
+              <div><div class="bar-bg"><div class="bar-fill" style="width:12%"></div></div></div>
+            </div>
+            <div class="list-item">
+              <div><div class="name">Khác</div><div class="meta">30 đơn · 7%</div></div>
+              <div><div class="bar-bg"><div class="bar-fill" style="width:7%"></div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cols">
+          <div class="panel">
+            <div class="panel-head">
+              <h3>Đơn hàng gần đây</h3>
+              <a onclick="switchPageByName('orders')">Xem tất cả</a>
+            </div>
+            <div class="tabs">
+              <div class="tab active" onclick="pickTab(this)">Tất cả</div>
+              <div class="tab" onclick="pickTab(this)">Đang sản xuất</div>
+              <div class="tab" onclick="pickTab(this)">Trễ hạn</div>
+              <div class="tab" onclick="pickTab(this)">Khiếu nại</div>
+            </div>
+            <table>
+              <thead>
+                <tr><th>Mã đơn</th><th>Khách hàng</th><th>Xưởng in</th><th>Trạng thái</th><th>Giá trị</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="order-id">#PK-08231</td>
+                  <td>Minh Anh Store</td>
+                  <td><div class="supplier-cell"><span class="sq">SG</span> Sài Gòn Print</div></td>
+                  <td><span class="pill blue"><span class="dot"></span>Đang sản xuất</span></td>
+                  <td class="num">4.680.000đ</td>
+                </tr>
+                <tr>
+                  <td class="order-id">#PK-08230</td>
+                  <td>Local Brand Co.</td>
+                  <td><div class="supplier-cell"><span class="sq">HN</span> Hà Nội Digital</div></td>
+                  <td><span class="pill amber"><span class="dot"></span>Trễ hạn 6h</span></td>
+                  <td class="num">12.400.000đ</td>
+                </tr>
+                <tr>
+                  <td class="order-id">#PK-08229</td>
+                  <td>Nguyễn Thảo</td>
+                  <td><div class="supplier-cell"><span class="sq">DN</span> Đà Nẵng Xpress</div></td>
+                  <td><span class="pill green"><span class="dot"></span>Hoàn tất</span></td>
+                  <td class="num">890.000đ</td>
+                </tr>
+                <tr>
+                  <td class="order-id">#PK-08228</td>
+                  <td>Quà Tặng Việt</td>
+                  <td><div class="supplier-cell"><span class="sq">SG</span> Sài Gòn Print</div></td>
+                  <td><span class="pill red"><span class="dot"></span>Khiếu nại</span></td>
+                  <td class="num">6.250.000đ</td>
+                </tr>
+                <tr>
+                  <td class="order-id">#PK-08227</td>
+                  <td>The Coffee House X</td>
+                  <td><div class="supplier-cell"><span class="sq">CT</span> Cần Thơ Print</div></td>
+                  <td><span class="pill blue"><span class="dot"></span>Đang sản xuất</span></td>
+                  <td class="num">3.120.000đ</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:18px;">
+            <div class="panel">
+              <div class="panel-head">
+                <h3>Xưởng in hiệu suất cao</h3>
+                <a onclick="switchPageByName('suppliers')">Tất cả</a>
+              </div>
+              <div class="list-item">
+                <div><div class="name">Sài Gòn Print</div><div class="meta">142 đơn tháng này</div></div>
+                <div><div class="bar-bg"><div class="bar-fill" style="width:92%"></div></div></div>
+              </div>
+              <div class="list-item">
+                <div><div class="name">Hà Nội Digital</div><div class="meta">98 đơn tháng này</div></div>
+                <div><div class="bar-bg"><div class="bar-fill" style="width:81%"></div></div></div>
+              </div>
+              <div class="list-item">
+                <div><div class="name">Đà Nẵng Xpress</div><div class="meta">76 đơn tháng này</div></div>
+                <div><div class="bar-bg"><div class="bar-fill" style="width:70%; background:var(--amber);"></div></div></div>
+              </div>
+              <div class="list-item">
+                <div><div class="name">Cần Thơ Print</div><div class="meta">54 đơn tháng này</div></div>
+                <div><div class="bar-bg"><div class="bar-fill" style="width:58%; background:var(--amber);"></div></div></div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head">
+                <h3>Tranh chấp cần xử lý</h3>
+                <a onclick="switchPageByName('disputes')">4 tất cả</a>
+              </div>
+              <div class="dispute-item" onclick="openDisputeModal('#PK-08228','Khách báo lỗi in sai màu — chờ xưởng phản hồi','Khẩn cấp')">
+                <div class="top"><span>#PK-08228</span><span class="pill red">Khẩn cấp</span></div>
+                <div class="desc">Khách báo lỗi in sai màu — chờ xưởng phản hồi</div>
+              </div>
+              <div class="dispute-item" onclick="openDisputeModal('#PK-08201','Yêu cầu hoàn tiền một phần do giao trễ','Đang xử lý')">
+                <div class="top"><span>#PK-08201</span><span class="pill amber">Đang xử lý</span></div>
+                <div class="desc">Yêu cầu hoàn tiền một phần do giao trễ</div>
+              </div>
+              <div class="dispute-item" onclick="openDisputeModal('#PK-08196','Sản phẩm không đúng chất liệu đã đặt','Đang xử lý')">
+                <div class="top"><span>#PK-08196</span><span class="pill amber">Đang xử lý</span></div>
+                <div class="desc">Sản phẩm không đúng chất liệu đã đặt</div>
+              </div>
+              <div class="dispute-item" onclick="openDisputeModal('#PK-08188','Khách khiếu nại đóng gói kém, sản phẩm bị móp','Mới')">
+                <div class="top"><span>#PK-08188</span><span class="pill blue">Mới</span></div>
+                <div class="desc">Khách khiếu nại đóng gói kém, sản phẩm bị móp</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ REPORTS ============ -->
+      <div class="tab-content" id="page-reports">
+        <div class="kpi-row">
+          <div class="kpi">
+            <div class="label">Doanh thu tháng 9</div>
+            <div class="value num">3,84 tỷ</div>
+            <div class="delta up">▲ 18,2% so với tháng 8</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Tổng đơn hàng</div>
+            <div class="value num">6.842</div>
+            <div class="delta up">▲ 12,4%</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Giá trị TB/đơn</div>
+            <div class="value num">561K</div>
+            <div class="delta up">▲ 5,1%</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Tỉ lệ hoàn/hủy</div>
+            <div class="value num">2,1%</div>
+            <div class="delta up">▼ 0,4%</div>
+          </div>
+        </div>
+
+        <div class="cols" style="margin-bottom:18px;">
+          <div class="panel">
+            <div class="panel-head">
+              <h3>Doanh thu theo tháng (2026)</h3>
+              <a onclick="toast('Đã xuất báo cáo PDF')">Xuất PDF</a>
+            </div>
+            <div class="chart" style="height:190px;">
+              <div class="bar" style="height:42%;"><span class="val">1.6t</span><span>T1</span></div>
+              <div class="bar" style="height:38%;"><span class="val">1.4t</span><span>T2</span></div>
+              <div class="bar" style="height:55%;"><span class="val">2.1t</span><span>T3</span></div>
+              <div class="bar" style="height:62%;"><span class="val">2.4t</span><span>T4</span></div>
+              <div class="bar" style="height:70%;"><span class="val">2.7t</span><span>T5</span></div>
+              <div class="bar" style="height:68%;"><span class="val">2.6t</span><span>T6</span></div>
+              <div class="bar" style="height:78%;"><span class="val">3.0t</span><span>T7</span></div>
+              <div class="bar" style="height:82%;"><span class="val">3.2t</span><span>T8</span></div>
+              <div class="bar" style="height:100%;"><span class="val">3.84t</span><span>T9</span></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <h3>Top xưởng in theo doanh thu</h3>
+              <a onclick="toast('Đã mở bảng xếp hạng đầy đủ')">Chi tiết</a>
+            </div>
+            <div class="list-item">
+              <div><div class="name">Sài Gòn Print</div><div class="meta">1,12 tỷ · 142 đơn</div></div>
+              <div><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></div>
+            </div>
+            <div class="list-item">
+              <div><div class="name">Hà Nội Digital</div><div class="meta">842 tr · 98 đơn</div></div>
+              <div><div class="bar-bg"><div class="bar-fill" style="width:75%"></div></div></div>
+            </div>
+            <div class="list-item">
+              <div><div class="name">Đà Nẵng Xpress</div><div class="meta">618 tr · 76 đơn</div></div>
+              <div><div class="bar-bg"><div class="bar-fill" style="width:55%"></div></div></div>
+            </div>
+            <div class="list-item">
+              <div><div class="name">Cần Thơ Print</div><div class="meta">412 tr · 54 đơn</div></div>
+              <div><div class="bar-bg"><div class="bar-fill" style="width:37%"></div></div></div>
+            </div>
+            <div class="list-item">
+              <div><div class="name">Hải Phòng In Ấn</div><div class="meta">286 tr · 38 đơn</div></div>
+              <div><div class="bar-bg"><div class="bar-fill" style="width:26%"></div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Chỉ số vận hành chi tiết</h3>
+            <a onclick="toast('Đã tải dữ liệu mới nhất')">Tải lại</a>
+          </div>
+          <div class="detail-grid" style="grid-template-columns:repeat(4,1fr);">
+            <div class="field"><label>Thời gian SX TB</label><strong>47,2 giờ</strong></div>
+            <div class="field"><label>Tỉ lệ đúng hạn</label><strong>94,3%</strong></div>
+            <div class="field"><label>Tỉ lệ lỗi in</label><strong>1,8%</strong></div>
+            <div class="field"><label>Điểm hài lòng</label><strong>4,9/5</strong></div>
+            <div class="field"><label>Xưởng hoạt động</label><strong>118/120</strong></div>
+            <div class="field"><label>Đơn đang xử lý</label><strong>2.148</strong></div>
+            <div class="field"><label>Khách hàng mới</label><strong>186</strong></div>
+            <div class="field"><label>Khách quay lại</label><strong>68%</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ ORDERS ============ -->
+      <div class="tab-content" id="page-orders">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Quản lý đơn hàng</h3>
+            <div style="display:flex; gap:8px;">
+              <button class="btn" onclick="toast('Đã xuất danh sách đơn hàng')">Xuất Excel</button>
+              <button class="btn primary" onclick="toast('Đã tạo đơn hàng mới')">+ Tạo đơn</button>
+            </div>
+          </div>
+          <div class="toolbar">
+            <input placeholder="Tìm mã đơn, khách hàng..." style="flex:1; min-width:180px;">
+            <select>
+              <option>Tất cả trạng thái</option>
+              <option>Đang sản xuất</option>
+              <option>Trễ hạn</option>
+              <option>Hoàn tất</option>
+              <option>Khiếu nại</option>
+            </select>
+            <select>
+              <option>Tất cả xưởng in</option>
+              <option>Sài Gòn Print</option>
+              <option>Hà Nội Digital</option>
+              <option>Đà Nẵng Xpress</option>
+            </select>
+            <select>
+              <option>Hôm nay</option>
+              <option>7 ngày qua</option>
+              <option>30 ngày qua</option>
+            </select>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Mã đơn</th><th>Khách hàng</th><th>Xưởng in</th><th>Trạng thái</th><th>Giá trị</th><th>Ngày tạo</th><th></th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="order-id">#PK-08231</td>
+                <td>Minh Anh Store</td>
+                <td><div class="supplier-cell"><span class="sq">SG</span> Sài Gòn Print</div></td>
+                <td><span class="pill blue"><span class="dot"></span>Đang sản xuất</span></td>
+                <td class="num">4.680.000đ</td>
+                <td class="mono">15/09 08:12</td>
+                <td><span class="action-link" onclick="toast('Đã mở chi tiết #PK-08231')">Chi tiết</span></td>
+              </tr>
+              <tr>
+                <td class="order-id">#PK-08230</td>
+                <td>Local Brand Co.</td>
+                <td><div class="supplier-cell"><span class="sq">HN</span> Hà Nội Digital</div></td>
+                <td><span class="pill amber"><span class="dot"></span>Trễ hạn 6h</span></td>
+                <td class="num">12.400.000đ</td>
+                <td class="mono">14/09 16:40</td>
+                <td><span class="action-link" onclick="toast('Đã mở chi tiết #PK-08230')">Chi tiết</span></td>
+              </tr>
+              <tr>
+                <td class="order-id">#PK-08229</td>
+                <td>Nguyễn Thảo</td>
+                <td><div class="supplier-cell"><span class="sq">DN</span> Đà Nẵng Xpress</div></td>
+                <td><span class="pill green"><span class="dot"></span>Hoàn tất</span></td>
+                <td class="num">890.000đ</td>
+                <td class="mono">14/09 14:20</td>
+                <td><span class="action-link" onclick="toast('Đã mở chi tiết #PK-08229')">Chi tiết</span></td>
+              </tr>
+              <tr>
+                <td class="order-id">#PK-08228</td>
+                <td>Quà Tặng Việt</td>
+                <td><div class="supplier-cell"><span class="sq">SG</span> Sài Gòn Print</div></td>
+                <td><span class="pill red"><span class="dot"></span>Khiếu nại</span></td>
+                <td class="num">6.250.000đ</td>
+                <td class="mono">13/09 10:05</td>
+                <td><span class="action-link" onclick="openDisputeModal('#PK-08228','Khách báo lỗi in sai màu — chờ xưởng phản hồi','Khẩn cấp')">Xử lý</span></td>
+              </tr>
+              <tr>
+                <td class="order-id">#PK-08227</td>
+                <td>The Coffee House X</td>
+                <td><div class="supplier-cell"><span class="sq">CT</span> Cần Thơ Print</div></td>
+                <td><span class="pill blue"><span class="dot"></span>Đang sản xuất</span></td>
+                <td class="num">3.120.000đ</td>
+                <td class="mono">13/09 09:15</td>
+                <td><span class="action-link" onclick="toast('Đã mở chi tiết #PK-08227')">Chi tiết</span></td>
+              </tr>
+              <tr>
+                <td class="order-id">#PK-08226</td>
+                <td>Cần Thơ Store</td>
+                <td><div class="supplier-cell"><span class="sq">CT</span> Cần Thơ Print</div></td>
+                <td><span class="pill green"><span class="dot"></span>Hoàn tất</span></td>
+                <td class="num">1.480.000đ</td>
+                <td class="mono">12/09 15:30</td>
+                <td><span class="action-link" onclick="toast('Đã mở chi tiết #PK-08226')">Chi tiết</span></td>
+              </tr>
+              <tr>
+                <td class="order-id">#PK-08225</td>
+                <td>Minh Anh Store</td>
+                <td><div class="supplier-cell"><span class="sq">SG</span> Sài Gòn Print</div></td>
+                <td><span class="pill green"><span class="dot"></span>Hoàn tất</span></td>
+                <td class="num">2.240.000đ</td>
+                <td class="mono">12/09 11:00</td>
+                <td><span class="action-link" onclick="toast('Đã mở chi tiết #PK-08225')">Chi tiết</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============ SUPPLIERS ============ -->
+      <div class="tab-content" id="page-suppliers">
+        <div class="kpi-row">
+          <div class="kpi">
+            <div class="label">Tổng xưởng đối tác</div>
+            <div class="value num">120</div>
+            <div class="delta up">▲ 4 xưởng mới tháng này</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Đang hoạt động</div>
+            <div class="value num">118</div>
+            <div class="delta">2 xưởng tạm nghỉ</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Hiệu suất TB</div>
+            <div class="value num">91%</div>
+            <div class="delta up">▲ 3% tháng này</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Xưởng cần cải thiện</div>
+            <div class="value num">7</div>
+            <div class="delta down">Dưới ngưỡng 80%</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Danh sách xưởng in đối tác</h3>
+            <button class="btn primary" onclick="toast('Đã mở form thêm xưởng in')">+ Thêm xưởng</button>
+          </div>
+          <div class="toolbar">
+            <input placeholder="Tìm xưởng in..." style="flex:1; min-width:180px;">
+            <select>
+              <option>Tất cả khu vực</option>
+              <option>Miền Nam</option>
+              <option>Miền Bắc</option>
+              <option>Miền Trung</option>
+            </select>
+            <select>
+              <option>Sắp xếp: Hiệu suất</option>
+              <option>Sắp xếp: Doanh thu</option>
+              <option>Sắp xếp: Số đơn</option>
+            </select>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Xưởng in</th><th>Khu vực</th><th>Đơn tháng</th><th>Hiệu suất</th><th>Đánh giá</th><th>Trạng thái</th><th></th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="supplier-cell"><span class="sq">SG</span> <strong>Sài Gòn Print</strong></div></td>
+                <td>TP.HCM</td>
+                <td class="num">142</td>
+                <td><div class="bar-bg" style="width:80px;"><div class="bar-fill" style="width:92%"></div></div></td>
+                <td class="num">4,9 ★</td>
+                <td><span class="pill green"><span class="dot"></span>Hoạt động</span></td>
+                <td><span class="action-link" onclick="openSupplierModal('Sài Gòn Print','TP.HCM',142,'92%','4.9')">Chi tiết</span></td>
+              </tr>
+              <tr>
+                <td><div class="supplier-cell"><span class="sq">HN</span> <strong>Hà Nội Digital</strong></div></td>
+                <td>Hà Nội</td>
+                <td class="num">98</td>
+                <td><div class="bar-bg" style="width:80px;"><div class="bar-fill" style="width:81%"></div></div></td>
+                <td class="num">4,7 ★</td>
+                <td><span class="pill green"><span class="dot"></span>Hoạt động</span></td>
+                <td><span class="action-link" onclick="openSupplierModal('Hà Nội Digital','Hà Nội',98,'81%','4.7')">Chi tiết</span></td>
+              </tr>
+              <tr>
+                <td><div class="supplier-cell"><span class="sq">DN</span> <strong>Đà Nẵng Xpress</strong></div></td>
+                <td>Đà Nẵng</td>
+                <td class="num">76</td>
+                <td><div class="bar-bg" style="width:80px;"><div class="bar-fill" style="width:70%; background:var(--amber);"></div></div></td>
+                <td class="num">4,5 ★</td>
+                <td><span class="pill amber"><span class="dot"></span>Cần cải thiện</span></td>
+                <td><span class="action-link" onclick="openSupplierModal('Đà Nẵng Xpress','Đà Nẵng',76,'70%','4.5')">Chi tiết</span></td>
+              </tr>
+              <tr>
+                <td><div class="supplier-cell"><span class="sq">CT</span> <strong>Cần Thơ Print</strong></div></td>
+                <td>Cần Thơ</td>
+                <td class="num">54</td>
+                <td><div class="bar-bg" style="width:80px;"><div class="bar-fill" style="width:58%; background:var(--amber);"></div></div></td>
+                <td class="num">4,3 ★</td>
+                <td><span class="pill amber"><span class="dot"></span>Cần cải thiện</span></td>
+                <td><span class="action-link" onclick="openSupplierModal('Cần Thơ Print','Cần Thơ',54,'58%','4.3')">Chi tiết</span></td>
+              </tr>
+              <tr>
+                <td><div class="supplier-cell"><span class="sq">HP</span> <strong>Hải Phòng In Ấn</strong></div></td>
+                <td>Hải Phòng</td>
+                <td class="num">38</td>
+                <td><div class="bar-bg" style="width:80px;"><div class="bar-fill" style="width:64%; background:var(--amber);"></div></div></td>
+                <td class="num">4,4 ★</td>
+                <td><span class="pill green"><span class="dot"></span>Hoạt động</span></td>
+                <td><span class="action-link" onclick="openSupplierModal('Hải Phòng In Ấn','Hải Phòng',38,'64%','4.4')">Chi tiết</span></td>
+              </tr>
+              <tr>
+                <td><div class="supplier-cell"><span class="sq">BD</span> <strong>Bình Dương Print Pro</strong></div></td>
+                <td>Bình Dương</td>
+                <td class="num">31</td>
+                <td><div class="bar-bg" style="width:80px;"><div class="bar-fill" style="width:88%"></div></div></td>
+                <td class="num">4,8 ★</td>
+                <td><span class="pill green"><span class="dot"></span>Hoạt động</span></td>
+                <td><span class="action-link" onclick="openSupplierModal('Bình Dương Print Pro','Bình Dương',31,'88%','4.8')">Chi tiết</span></td>
+              </tr>
+              <tr>
+                <td><div class="supplier-cell"><span class="sq">NT</span> <strong>Nha Trang In Nhanh</strong></div></td>
+                <td>Khánh Hòa</td>
+                <td class="num">22</td>
+                <td><div class="bar-bg" style="width:80px;"><div class="bar-fill" style="width:52%; background:var(--red);"></div></div></td>
+                <td class="num">4,1 ★</td>
+                <td><span class="pill red"><span class="dot"></span>Tạm nghỉ</span></td>
+                <td><span class="action-link" onclick="openSupplierModal('Nha Trang In Nhanh','Khánh Hòa',22,'52%','4.1')">Chi tiết</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============ DISPUTES ============ -->
+      <div class="tab-content" id="page-disputes">
+        <div class="kpi-row">
+          <div class="kpi">
+            <div class="label">Tranh chấp mở</div>
+            <div class="value num">4</div>
+            <div class="delta down">▲ 2 đơn mới hôm nay</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Đã giải quyết tháng này</div>
+            <div class="value num">38</div>
+            <div class="delta up">▲ 8 so với tháng 8</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Thời gian xử lý TB</div>
+            <div class="value num">6,2h</div>
+            <div class="delta up">▼ 1,4h</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Tỉ lệ khách hài lòng</div>
+            <div class="value num">87%</div>
+            <div class="delta up">▲ 3%</div>
+          </div>
+        </div>
+
+        <div class="cols">
+          <div class="panel">
+            <div class="panel-head">
+              <h3>Danh sách tranh chấp</h3>
+              <a onclick="toast('Đã xuất danh sách tranh chấp')">Xuất báo cáo</a>
+            </div>
+            <div class="tabs">
+              <div class="tab active" onclick="pickTab(this)">Tất cả (4)</div>
+              <div class="tab" onclick="pickTab(this)">Khẩn cấp</div>
+              <div class="tab" onclick="pickTab(this)">Đang xử lý</div>
+              <div class="tab" onclick="pickTab(this)">Đã giải quyết</div>
+            </div>
+            <table>
+              <thead>
+                <tr><th>Mã đơn</th><th>Khách hàng</th><th>Loại</th><th>Trạng thái</th><th></th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="order-id">#PK-08228</td>
+                  <td>Quà Tặng Việt</td>
+                  <td>Sai màu in</td>
+                  <td><span class="pill red"><span class="dot"></span>Khẩn cấp</span></td>
+                  <td><span class="action-link" onclick="openDisputeModal('#PK-08228','Khách báo lỗi in sai màu — chờ xưởng phản hồi','Khẩn cấp')">Xử lý</span></td>
+                </tr>
+                <tr>
+                  <td class="order-id">#PK-08201</td>
+                  <td>Local Brand Co.</td>
+                  <td>Giao trễ</td>
+                  <td><span class="pill amber"><span class="dot"></span>Đang xử lý</span></td>
+                  <td><span class="action-link" onclick="openDisputeModal('#PK-08201','Yêu cầu hoàn tiền một phần do giao trễ','Đang xử lý')">Xử lý</span></td>
+                </tr>
+                <tr>
+                  <td class="order-id">#PK-08196</td>
+                  <td>Minh Anh Store</td>
+                  <td>Sai chất liệu</td>
+                  <td><span class="pill amber"><span class="dot"></span>Đang xử lý</span></td>
+                  <td><span class="action-link" onclick="openDisputeModal('#PK-08196','Sản phẩm không đúng chất liệu đã đặt','Đang xử lý')">Xử lý</span></td>
+                </tr>
+                <tr>
+                  <td class="order-id">#PK-08188</td>
+                  <td>The Coffee House X</td>
+                  <td>Đóng gói kém</td>
+                  <td><span class="pill blue"><span class="dot"></span>Mới</span></td>
+                  <td><span class="action-link" onclick="openDisputeModal('#PK-08188','Khách khiếu nại đóng gói kém, sản phẩm bị móp','Mới')">Xử lý</span></td>
+                </tr>
+                <tr>
+                  <td class="order-id">#PK-08174</td>
+                  <td>Nguyễn Thảo</td>
+                  <td>Thiếu số lượng</td>
+                  <td><span class="pill green"><span class="dot"></span>Đã giải quyết</span></td>
+                  <td><span class="action-link" onclick="toast('Đã xem chi tiết tranh chấp đã đóng')">Xem</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <h3>Phân loại tranh chấp</h3>
+              <a onclick="toast('Đã mở báo cáo phân tích')">Chi tiết</a>
+            </div>
+            <div class="list-item">
+              <div><div class="name">Sai màu / sai thiết kế</div><div class="meta">18 vụ · 32%</div></div>
+              <div><div class="bar-bg"><div class="bar-fill" style="width:32%; background:var(--red);"></div></div></div>
+            </div>
+            <div class="list-item">
+              <div><div class="name">Giao trễ</div><div class="meta">14 vụ · 25%</div></div>
+              <div><div class="bar-bg"><div class="bar-fill" style="width:25%; background:var(--amber);"></div></div></div>
+            </div>
+            <div class="list-item">
+              <div><div class="name">Sai chất liệu</div><div class="meta">9 vụ · 16%</div></div>
+              <div><div class="bar-bg"><div class="bar-fill" style="width:16%"></div></div></div>
+            </div>
+            <div class="list-item">
+              <div><div class="name">Đóng gói / hư hỏng</div><div class="meta">8 vụ · 14%</div></div>
+              <div><div class="bar-bg"><div class="bar-fill" style="width:14%"></div></div></div>
+            </div>
+            <div class="list-item">
+              <div><div class="name">Khác</div><div class="meta">7 vụ · 13%</div></div>
+              <div><div class="bar-bg"><div class="bar-fill" style="width:13%"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ BUYERS ============ -->
+      <div class="tab-content" id="page-buyers">
+        <div class="kpi-row">
+          <div class="kpi">
+            <div class="label">Tổng người mua</div>
+            <div class="value num">18.420</div>
+            <div class="delta up">▲ 186 mới tháng này</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Khách hoạt động 30 ngày</div>
+            <div class="value num">6.842</div>
+            <div class="delta up">▲ 12%</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Khách quay lại</div>
+            <div class="value num">68%</div>
+            <div class="delta up">▲ 4%</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Giá trị TB/khách</div>
+            <div class="value num">2,4 tr</div>
+            <div class="delta up">▲ 8%</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Danh sách người mua</h3>
+            <button class="btn" onclick="toast('Đã xuất danh sách khách hàng')">Xuất Excel</button>
+          </div>
+          <div class="toolbar">
+            <input placeholder="Tìm tên, email, số điện thoại..." style="flex:1; min-width:200px;">
+            <select>
+              <option>Tất cả phân loại</option>
+              <option>Khách VIP</option>
+              <option>Khách doanh nghiệp</option>
+              <option>Khách lẻ</option>
+            </select>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Khách hàng</th><th>Loại</th><th>Đơn hàng</th><th>Tổng chi tiêu</th><th>Đăng ký</th><th>Trạng thái</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Minh Anh Store</strong><div style="font-size:11.5px; color:var(--muted);">minhanh@store.vn</div></td>
+                <td><span class="pill blue">Doanh nghiệp</span></td>
+                <td class="num">42</td>
+                <td class="num">86.400.000đ</td>
+                <td class="mono">12/03/2025</td>
+                <td><span class="pill green"><span class="dot"></span>Hoạt động</span></td>
+              </tr>
+              <tr>
+                <td><strong>Local Brand Co.</strong><div style="font-size:11.5px; color:var(--muted);">hello@localbrand.vn</div></td>
+                <td><span class="pill blue">Doanh nghiệp</span></td>
+                <td class="num">38</td>
+                <td class="num">124.800.000đ</td>
+                <td class="mono">05/01/2025</td>
+                <td><span class="pill green"><span class="dot"></span>VIP</span></td>
+              </tr>
+              <tr>
+                <td><strong>Quà Tặng Việt</strong><div style="font-size:11.5px; color:var(--muted);">sales@quatangviet.vn</div></td>
+                <td><span class="pill blue">Doanh nghiệp</span></td>
+                <td class="num">28</td>
+                <td class="num">68.250.000đ</td>
+                <td class="mono">18/07/2025</td>
+                <td><span class="pill green"><span class="dot"></span>Hoạt động</span></td>
+              </tr>
+              <tr>
+                <td><strong>Nguyễn Thảo</strong><div style="font-size:11.5px; color:var(--muted);">thaonguyen@gmail.com</div></td>
+                <td><span class="pill gray">Khách lẻ</span></td>
+                <td class="num">12</td>
+                <td class="num">8.900.000đ</td>
+                <td class="mono">22/11/2025</td>
+                <td><span class="pill green"><span class="dot"></span>Hoạt động</span></td>
+              </tr>
+              <tr>
+                <td><strong>The Coffee House X</strong><div style="font-size:11.5px; color:var(--muted);">ops@coffeex.vn</div></td>
+                <td><span class="pill blue">Doanh nghiệp</span></td>
+                <td class="num">19</td>
+                <td class="num">52.120.000đ</td>
+                <td class="mono">03/06/2025</td>
+                <td><span class="pill green"><span class="dot"></span>VIP</span></td>
+              </tr>
+              <tr>
+                <td><strong>Cần Thơ Store</strong><div style="font-size:11.5px; color:var(--muted);">ctstore@email.vn</div></td>
+                <td><span class="pill gray">Khách lẻ</span></td>
+                <td class="num">7</td>
+                <td class="num">4.480.000đ</td>
+                <td class="mono">14/08/2026</td>
+                <td><span class="pill amber"><span class="dot"></span>Ít hoạt động</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============ STAFF ============ -->
+      <div class="tab-content" id="page-staff">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Nhân sự nội bộ</h3>
+            <button class="btn primary" onclick="toast('Đã mở form thêm nhân sự')">+ Thêm nhân sự</button>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Họ tên</th><th>Vai trò</th><th>Bộ phận</th><th>Email</th><th>Trạng thái</th><th></th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="supplier-cell"><div class="avatar" style="width:32px;height:32px;font-size:12px;">TH</div> <strong>Trần Hòa</strong></div></td>
+                <td>Quản trị viên</td>
+                <td>Vận hành</td>
+                <td>hoa.tran@printkraft.vn</td>
+                <td><span class="pill green"><span class="dot"></span>Đang làm</span></td>
+                <td><span class="action-link" onclick="toast('Đã mở hồ sơ nhân sự')">Chi tiết</span></td>
+              </tr>
+              <tr>
+                <td><div class="supplier-cell"><div class="avatar" style="width:32px;height:32px;font-size:12px; background:var(--green);">NL</div> <strong>Nguyễn Linh</strong></div></td>
+                <td>Quản lý đơn hàng</td>
+                <td>Vận hành</td>
+                <td>linh.nguyen@printkraft.vn</td>
+                <td><span class="pill green"><span class="dot"></span>Đang làm</span></td>
+                <td><span class="action-link" onclick="toast('Đã mở hồ sơ nhân sự')">Chi tiết</span></td>
+              </tr>
+              <tr>
+                <td><div class="supplier-cell"><div class="avatar" style="width:32px;height:32px;font-size:12px; background:var(--amber);">PM</div> <strong>Phạm Minh</strong></div></td>
+                <td>CSKH</td>
+                <td>Hỗ trợ</td>
+                <td>minh.pham@printkraft.vn</td>
+                <td><span class="pill green"><span class="dot"></span>Đang làm</span></td>
+                <td><span class="action-link" onclick="toast('Đã mở hồ sơ nhân sự')">Chi tiết</span></td>
+              </tr>
+              <tr>
+                <td><div class="supplier-cell"><div class="avatar" style="width:32px;height:32px;font-size:12px; background:var(--red);">LT</div> <strong>Lê Trang</strong></div></td>
+                <td>Kế toán</td>
+                <td>Tài chính</td>
+                <td>trang.le@printkraft.vn</td>
+                <td><span class="pill green"><span class="dot"></span>Đang làm</span></td>
+                <td><span class="action-link" onclick="toast('Đã mở hồ sơ nhân sự')">Chi tiết</span></td>
+              </tr>
+              <tr>
+                <td><div class="supplier-cell"><div class="avatar" style="width:32px;height:32px;font-size:12px; background:var(--muted);">VH</div> <strong>Vũ Hùng</strong></div></td>
+                <td>Giám sát xưởng</td>
+                <td>Vận hành</td>
+                <td>hung.vu@printkraft.vn</td>
+                <td><span class="pill amber"><span class="dot"></span>Tạm nghỉ</span></td>
+                <td><span class="action-link" onclick="toast('Đã mở hồ sơ nhân sự')">Chi tiết</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============ SETTINGS ============ -->
+      <div class="tab-content" id="page-settings">
+        <div class="cols">
+          <div class="panel">
+            <div class="panel-head"><h3>Cấu hình hệ thống</h3></div>
+            <div class="detail-grid">
+              <div class="field"><label>Phiên bản</label><strong>v2.8.4</strong></div>
+              <div class="field"><label>Môi trường</label><strong>Production</strong></div>
+              <div class="field"><label>Múi giờ</label><strong>GMT+7 (Việt Nam)</strong></div>
+              <div class="field"><label>Tiền tệ</label><strong>VND (₫)</strong></div>
+            </div>
+            <div style="padding:0 20px 20px;">
+              <div class="list-item" style="padding-left:0; padding-right:0;">
+                <div><div class="name">Thông báo email đơn hàng mới</div><div class="meta">Gửi email cho quản trị viên khi có đơn mới</div></div>
+                <span class="pill green"><span class="dot"></span>Bật</span>
+              </div>
+              <div class="list-item" style="padding-left:0; padding-right:0;">
+                <div><div class="name">Tự động ghép xưởng in</div><div class="meta">Hệ thống tự chọn xưởng tối ưu theo giá và thời gian</div></div>
+                <span class="pill green"><span class="dot"></span>Bật</span>
+              </div>
+              <div class="list-item" style="padding-left:0; padding-right:0;">
+                <div><div class="name">Duyệt thủ công đơn &gt; 50 triệu</div><div class="meta">Yêu cầu quản trị viên duyệt trước khi sản xuất</div></div>
+                <span class="pill green"><span class="dot"></span>Bật</span>
+              </div>
+              <div class="list-item" style="padding-left:0; padding-right:0;">
+                <div><div class="name">Chế độ bảo trì</div><div class="meta">Tạm dừng nhận đơn mới để bảo trì hệ thống</div></div>
+                <span class="pill gray"><span class="dot"></span>Tắt</span>
+              </div>
+            </div>
+            <div style="padding:0 20px 20px; display:flex; gap:10px;">
+              <button class="btn primary" onclick="toast('Đã lưu cấu hình hệ thống')">Lưu thay đổi</button>
+              <button class="btn" onclick="toast('Đã khôi phục cấu hình mặc định')">Khôi phục mặc định</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h3>Phân quyền vai trò</h3></div>
+            <div class="list-item">
+              <div><div class="name">Quản trị viên</div><div class="meta">Toàn quyền hệ thống</div></div>
+              <span class="pill blue">2 người</span>
+            </div>
+            <div class="list-item">
+              <div><div class="name">Quản lý vận hành</div><div class="meta">Quản lý đơn hàng, xưởng in, tranh chấp</div></div>
+              <span class="pill blue">6 người</span>
+            </div>
+            <div class="list-item">
+              <div><div class="name">CSKH</div><div class="meta">Xử lý khiếu nại, hỗ trợ khách hàng</div></div>
+              <span class="pill blue">12 người</span>
+            </div>
+            <div class="list-item">
+              <div><div class="name">Kế toán</div><div class="meta">Xem báo cáo doanh thu, hóa đơn</div></div>
+              <span class="pill blue">4 người</span>
+            </div>
+            <div class="list-item">
+              <div><div class="name">Giám sát xưởng</div><div class="meta">Theo dõi tiến độ xưởng đối tác</div></div>
+              <span class="pill blue">8 người</span>
+            </div>
+            <div style="padding:14px 20px;">
+              <button class="btn" onclick="toast('Đã mở trang phân quyền chi tiết')">Quản lý phân quyền</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ LOGS ============ -->
+      <div class="tab-content" id="page-logs">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Nhật ký hoạt động</h3>
+            <div style="display:flex; gap:8px;">
+              <select style="border:1px solid var(--line); border-radius:8px; padding:8px 12px; font-size:13px;">
+                <option>Tất cả hành động</option>
+                <option>Đơn hàng</option>
+                <option>Xưởng in</option>
+                <option>Người dùng</option>
+                <option>Hệ thống</option>
+              </select>
+              <button class="btn" onclick="toast('Đã xuất nhật ký')">Xuất log</button>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Thời gian</th><th>Người thực hiện</th><th>Hành động</th><th>Đối tượng</th><th>Chi tiết</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="mono">15/09 10:42</td>
+                <td>Trần Hòa</td>
+                <td><span class="pill blue">Cập nhật</span></td>
+                <td>#PK-08231</td>
+                <td>Chuyển trạng thái sang "Đang sản xuất"</td>
+              </tr>
+              <tr>
+                <td class="mono">15/09 10:30</td>
+                <td>Hệ thống</td>
+                <td><span class="pill green">Tự động</span></td>
+                <td>#PK-08235</td>
+                <td>Ghép xưởng in Sài Gòn Print</td>
+              </tr>
+              <tr>
+                <td class="mono">15/09 10:12</td>
+                <td>Nguyễn Linh</td>
+                <td><span class="pill amber">Cảnh báo</span></td>
+                <td>#PK-08230</td>
+                <td>Đánh dấu trễ hạn — gửi thông báo cho xưởng</td>
+              </tr>
+              <tr>
+                <td class="mono">15/09 09:55</td>
+                <td>Phạm Minh</td>
+                <td><span class="pill red">Tranh chấp</span></td>
+                <td>#PK-08228</td>
+                <td>Tạo tranh chấp mới — loại "Sai màu in"</td>
+              </tr>
+              <tr>
+                <td class="mono">15/09 09:40</td>
+                <td>Trần Hòa</td>
+                <td><span class="pill blue">Cập nhật</span></td>
+                <td>Hà Nội Digital</td>
+                <td>Điều chỉnh hiệu suất từ 78% lên 81%</td>
+              </tr>
+              <tr>
+                <td class="mono">15/09 09:20</td>
+                <td>Hệ thống</td>
+                <td><span class="pill green">Tự động</span></td>
+                <td>#PK-08240</td>
+                <td>Nhận đơn mới từ The Coffee House X</td>
+              </tr>
+              <tr>
+                <td class="mono">15/09 08:45</td>
+                <td>Lê Trang</td>
+                <td><span class="pill blue">Tài chính</span></td>
+                <td>#PK-08225</td>
+                <td>Xác nhận thanh toán 2.240.000đ</td>
+              </tr>
+              <tr>
+                <td class="mono">15/09 08:15</td>
+                <td>Hệ thống</td>
+                <td><span class="pill green">Tự động</span></td>
+                <td>#PK-08231</td>
+                <td>Gửi file thiết kế đến xưởng Sài Gòn Print</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== DISPUTE MODAL ===== -->
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
+<div class="modal" id="disputeModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeAll()">✕</button>
+    <h3 id="dmId">#PK-08228</h3>
+    <div class="sub" id="dmDesc">Khách báo lỗi in sai màu — chờ xưởng phản hồi</div>
+
+    <div class="detail-grid">
+      <div class="field"><label>Khách hàng</label><strong>Quà Tặng Việt</strong></div>
+      <div class="field"><label>Xưởng in</label><strong>Sài Gòn Print</strong></div>
+      <div class="field"><label>Giá trị đơn</label><strong class="num">6.250.000đ</strong></div>
+      <div class="field"><label>Trạng thái</label><strong id="dmStatus">Khẩn cấp</strong></div>
+    </div>
+
+    <h3 style="font-size:15px; margin-bottom:12px;">Lịch sử xử lý</h3>
+    <div class="detail-grid" style="grid-template-columns:1fr;">
+      <div class="field"><label>15/09 09:55 · Phạm Minh</label><strong style="font-size:13px;">Tạo tranh chấp — gửi ảnh sản phẩm lỗi</strong></div>
+      <div class="field"><label>15/09 10:05 · Hệ thống</label><strong style="font-size:13px;">Thông báo xưởng Sài Gòn Print</strong></div>
+      <div class="field"><label>Chờ xử lý</label><strong style="font-size:13px;">Đang đợi xưởng phản hồi trong 2 giờ</strong></div>
+    </div>
+
+    <div style="display:flex; gap:10px; margin-top:18px;">
+      <button class="btn primary" style="flex:1;" onclick="toast('Đã gửi phản hồi cho khách hàng')">Phản hồi khách</button>
+      <button class="btn danger" style="flex:1;" onclick="toast('Đã quyết định hoàn tiền cho khách')">Hoàn tiền</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SUPPLIER MODAL ===== -->
+<div class="modal" id="supplierModal">
+  <div class="modal-box" style="width:520px;">
+    <button class="modal-close" onclick="closeAll()">✕</button>
+    <h3 id="smName">Sài Gòn Print</h3>
+    <div class="sub" id="smRegion">TP.HCM · Đối tác từ 2024</div>
+
+    <div class="detail-grid">
+      <div class="field"><label>Đơn tháng này</label><strong id="smOrders" class="num">142</strong></div>
+      <div class="field"><label>Hiệu suất</label><strong id="smPerf">92%</strong></div>
+      <div class="field"><label>Đánh giá</label><strong id="smRating">4.9 ★</strong></div>
+      <div class="field"><label>Tỉ lệ đúng hạn</label><strong>96%</strong></div>
+    </div>
+
+    <h3 style="font-size:15px; margin-bottom:12px;">Chỉ số chi tiết</h3>
+    <div class="list-item" style="padding-left:0; padding-right:0;">
+      <div><div class="name">Thời gian sản xuất TB</div><div class="meta">42 giờ · Nhanh hơn 12% mức chuẩn</div></div>
+    </div>
+    <div class="list-item" style="padding-left:0; padding-right:0;">
+      <div><div class="name">Tỉ lệ lỗi in</div><div class="meta">1,2% · Thấp hơn mức cho phép</div></div>
+    </div>
+    <div class="list-item" style="padding-left:0; padding-right:0;">
+      <div><div class="name">Tỉ lệ hủy đơn</div><div class="meta">0,4% · Rất thấp</div></div>
+    </div>
+
+    <div style="display:flex; gap:10px; margin-top:18px;">
+      <button class="btn" style="flex:1;" onclick="toast('Đã gửi tin nhắn cho xưởng')">Nhắn tin</button>
+      <button class="btn primary" style="flex:1;" onclick="toast('Đã mở trang quản lý xưởng')">Quản lý</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Đã thực hiện</div>
+
+<script>
+  /* ---------- Toast ---------- */
+  let toastTimer;
+  function toast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
+  }
+
+  /* ---------- Page switching ---------- */
+  const pageTitles = {
+    dashboard: ['Bảng điều khiển vận hành', 'Thứ Ba, 15 tháng 9, 2026'],
+    reports:   ['Báo cáo & Doanh thu', 'Phân tích hiệu suất kinh doanh'],
+    orders:    ['Quản lý đơn hàng', 'Toàn bộ đơn hàng trên hệ thống'],
+    suppliers: ['Xưởng in đối tác', '120 xưởng in trên toàn quốc'],
+    disputes:  ['Tranh chấp', 'Xử lý khiếu nại giữa khách hàng và xưởng in'],
+    buyers:    ['Người mua', 'Quản lý tài khoản khách hàng'],
+    staff:     ['Nhân sự nội bộ', 'Quản lý đội ngũ vận hành PrintKraft'],
+    settings:  ['Cấu hình hệ thống', 'Thiết lập tham số và phân quyền'],
+    logs:      ['Nhật ký hoạt động', 'Toàn bộ thao tác trên hệ thống']
+  };
+
+  function switchPage(el, page){
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.getElementById('pageTitle').textContent = pageTitles[page][0];
+    document.getElementById('pageSub').textContent = pageTitles[page][1];
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function switchPageByName(page){
+    const items = document.querySelectorAll('.nav-item');
+    items.forEach(n=>{
+      if(n.textContent.trim().toLowerCase().includes(pageTitles[page][0].toLowerCase().split(' ')[0].toLowerCase())
+         || (page === 'orders' && n.textContent.includes('Đơn hàng'))
+         || (page === 'suppliers' && n.textContent.includes('Xưởng in'))
+         || (page === 'disputes' && n.textContent.includes('Tranh chấp'))
+         || (page === 'reports' && n.textContent.includes('Báo cáo'))
+         || (page === 'buyers' && n.textContent.includes('Người mua'))
+         || (page === 'staff' && n.textContent.includes('Nhân sự'))
+         || (page === 'settings' && n.textContent.includes('Cấu hình'))
+         || (page === 'logs' && n.textContent.includes('Nhật ký'))
+         || (page === 'dashboard' && n.textContent.includes('Bảng điều khiển'))
+      ){
+        switchPage(n, page);
+      }
+    });
+  }
+
+  /* ---------- Tabs ---------- */
+  function pickTab(el){
+    el.parentElement.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  /* ---------- Modal ---------- */
+  function openDisputeModal(id, desc, status){
+    document.getElementById('dmId').textContent = id;
+    document.getElementById('dmDesc').textContent = desc;
+    const s = document.getElementById('dmStatus');
+    s.textContent = status;
+    s.style.color = status === 'Khẩn cấp' ? 'var(--red)'
+                   : status === 'Đang xử lý' ? 'var(--amber)'
+                   : 'var(--cobalt)';
+    document.getElementById('disputeModal').classList.add('show');
+    document.getElementById('overlay').classList.add('show');
+  }
+
+  function openSupplierModal(name, region, orders, perf, rating){
+    document.getElementById('smName').textContent = name;
+    document.getElementById('smRegion').textContent = region + ' · Đối tác từ 2024';
+    document.getElementById('smOrders').textContent = orders;
+    document.getElementById('smPerf').textContent = perf;
+    document.getElementById('smRating').textContent = rating + ' ★';
+    document.getElementById('supplierModal').classList.add('show');
+    document.getElementById('overlay').classList.add('show');
+  }
+
+  function closeAll(){
+    document.querySelectorAll('.modal, .overlay').forEach(el=>el.classList.remove('show'));
+  }
+  document.addEventListener('keydown', e=>{ if(e.key === 'Escape') closeAll(); });
+</script>
+</body>
+</html>

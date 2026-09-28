@@ -608,20 +608,66 @@ function openDisputeModal(id,desc,status){
 }
 
 function openSupplierModal(name,region,orders,performance,rating){
-  document.getElementById('smName').textContent=name;
-  document.getElementById('smRegion').textContent=region+' · Đối tác từ 2024';
-  document.getElementById('smOrders').textContent=orders;
-  document.getElementById('smPerf').textContent=performance;
-  document.getElementById('smRating').textContent=rating+' ★';
-  showModal('supplierModal');
+    document.getElementById('smName').textContent=name;
+    document.getElementById('smRegion').textContent=region+' · Đối tác từ 2024';
+    document.getElementById('smOrders').textContent=orders;
+    document.getElementById('smPerf').textContent=performance;
+    document.getElementById('smRating').textContent=rating+' ★';
+    showModal('supplierModal'); // Đảm bảo bạn đã có hàm showModal ở đâu đó, hoặc thay bằng logic thêm class 'show'
 }
 
 /* ===== Export helpers and startup ===== */
 function csvCell(value){return '"' + String(value ?? '').replace(/"/g,'""') + '"';}
 function downloadCsv(filename,rows){const blob=new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8'});const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download=filename;document.body.appendChild(link);link.click();link.remove();URL.revokeObjectURL(link.href);toast('Đã xuất '+filename);}
 
-document.addEventListener('keydown',event=>{if(event.key==='Escape')closeAll();});
-document.addEventListener('DOMContentLoaded',()=>{
-  refreshAll();
-  document.getElementById('notificationMessage')?.addEventListener('input',event=>{document.getElementById('notificationCharCount').textContent=event.target.value.length;});
+/* ===== CÁC HÀM MỞ/ĐÓNG MODAL (ĐẶT Ở NGOÀI ĐỂ HTML GỌI ĐƯỢC) ===== */
+function openProductModal(action, id) {
+    const overlay = document.getElementById('overlay');
+    const modal = document.getElementById('productModal');
+
+    if (overlay) overlay.classList.add('show');
+    if (modal) {
+        modal.classList.add('show');
+
+        const title = document.getElementById('productModalTitle');
+        if (title) {
+            if (action === 'edit') {
+                title.innerText = 'Chỉnh sửa sản phẩm ' + (id || '');
+            } else {
+                title.innerText = 'Thêm sản phẩm';
+            }
+        }
+    }
+}
+
+function closeProductModal() {
+    const overlay = document.getElementById('overlay');
+    const modal = document.getElementById('productModal');
+
+    if (modal) modal.classList.remove('show');
+    if (overlay) overlay.classList.remove('show');
+}
+
+// Hàm đóng tất cả modal (Vì HTML của bạn có dùng nút gọi closeAll())
+function closeAll() {
+    const overlay = document.getElementById('overlay');
+    if (overlay) overlay.classList.remove('show');
+
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.classList.remove('show');
+    });
+}
+
+/* ===== SỰ KIỆN KHI TRANG TẢI XONG ===== */
+document.addEventListener('keydown', event => {
+    if(event.key === 'Escape') closeAll();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Chỉ để lại các thao tác khởi tạo ở đây
+    if (typeof refreshAll === 'function') refreshAll();
+
+    document.getElementById('notificationMessage')?.addEventListener('input', event => {
+        document.getElementById('notificationCharCount').textContent = event.target.value.length;
+    });
 });

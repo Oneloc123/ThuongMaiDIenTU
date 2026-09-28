@@ -41,7 +41,12 @@
       <div class="nav-item" onclick="switchPage(this,'settings')"><span class="ic">⚙️</span> Cấu hình</div>
       <div class="nav-item" onclick="switchPage(this,'logs')"><span class="ic">📜</span> Nhật ký hoạt động</div>
     </div>
-
+      <div class="nav-group">
+          <div class="nav-label">Sản phẩm & Danh mục</div>
+          <div class="nav-item" onclick="switchPage(this,'products')"><span class="ic">🏷️</span> Quản lý sản phẩm</div>
+          <div class="nav-item" onclick="switchPage(this,'categories')"><span class="ic">🗂️</span> Quản lý danh mục</div>
+          <div class="nav-item" onclick="switchPage(this,'3d-models')"><span class="ic">🧊</span> Kho file mô hình 3D</div>
+      </div>
     <div class="sidebar-foot">
       <div class="avatar">TH</div>
       <div><strong>Trần Hòa</strong><span>Quản trị viên</span></div>
@@ -61,8 +66,272 @@
       </div>
     </div>
 
-    <div class="content">
+      <!-- BẮT ĐẦU KHUNG NỘI DUNG CHÍNH -->
+      <div class="content">
 
+          <!-- ============ QUẢN LÝ SẢN PHẨM ============ -->
+          <div class="tab-content active" id="page-products">
+              <div class="panel">
+                  <div class="panel-head">
+                      <div>
+                          <h3>Danh sách sản phẩm</h3>
+                          <div class="panel-subtitle">Quản lý tìm kiếm, phân loại và duyệt sản phẩm Print-on-Demand</div>
+                      </div>
+                      <div class="inline-actions">
+                          <button class="btn primary" type="button" onclick="openProductModal('add')">+ Thêm sản phẩm</button>
+                      </div>
+                  </div>
+
+                  <div class="toolbar">
+                      <input placeholder="Tìm tên sản phẩm, mã SKU..." style="flex:1; min-width:250px;">
+                      <select>
+                          <option>Tất cả danh mục</option>
+                          <option>Thời trang (Apparel)</option>
+                          <option>Cốc & Bình nước (Drinkware)</option>
+                          <option>Phụ kiện (Accessories)</option>
+                          <option>Trang trí nhà (Home Decor)</option>
+                      </select>
+                      <select>
+                          <option>Tất cả trạng thái</option>
+                          <option>Đã duyệt</option>
+                          <option>Chờ duyệt</option>
+                          <option>Bị khóa</option>
+                      </select>
+                  </div>
+
+                  <div class="table-wrap">
+                      <table>
+                          <thead>
+                          <tr>
+                              <th style="width: 50px;">Ảnh</th>
+                              <th>Mã SKU</th>
+                              <th>Tên sản phẩm</th>
+                              <th>Danh mục</th>
+                              <th>Biến thể</th>
+                              <th>Giá bán gốc</th>
+                              <th>Trạng thái</th>
+                              <th>Thao tác</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <!-- SP Đã duyệt -> Hiện Sửa | Xóa | Khóa -->
+                          <tr>
+                              <td><div style="width:40px; height:40px; background:#f0f0f0; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:20px;">👕</div></td>
+                              <td class="order-id">TSH-001</td>
+                              <td><strong>Áo thun Cotton 100% Form Rộng</strong></td>
+                              <td>Thời trang</td>
+                              <td><span class="meta">5 Size · 3 Màu</span></td>
+                              <td class="num">150.000đ</td>
+                              <td><span class="pill green"><span class="dot"></span>Đã duyệt</span></td>
+                              <td>
+                                  <div class="action-menu">
+                                      <span class="action-link" onclick="openProductModal('edit', 'TSH-001')">Sửa</span> |
+                                      <span class="action-link" style="color: var(--red);" onclick="toast('Đã xóa sản phẩm')">Xóa</span> |
+                                      <span class="action-link" style="color: var(--amber);" onclick="toast('Đã khóa sản phẩm')">Khóa</span>
+                                  </div>
+                              </td>
+                          </tr>
+
+                          <!-- SP Chờ duyệt -> Hiện Sửa | Xóa | Duyệt -->
+                          <tr>
+                              <td><div style="width:40px; height:40px; background:#f0f0f0; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:20px;">☕</div></td>
+                              <td class="order-id">MUG-330</td>
+                              <td><strong>Cốc sứ trắng in nhiệt 330ml</strong></td>
+                              <td>Cốc & Bình nước</td>
+                              <td><span class="meta">1 Kích thước</span></td>
+                              <td class="num">85.000đ</td>
+                              <td><span class="pill amber"><span class="dot"></span>Chờ duyệt</span></td>
+                              <td>
+                                  <div class="action-menu">
+                                      <span class="action-link" onclick="openProductModal('edit', 'MUG-330')">Sửa</span> |
+                                      <span class="action-link" style="color: var(--red);" onclick="toast('Đã xóa sản phẩm')">Xóa</span> |
+                                      <span class="action-link" style="color: #0052cc;" onclick="toast('Đã duyệt sản phẩm')">Duyệt</span>
+                                  </div>
+                              </td>
+                          </tr>
+
+                          <!-- SP Đã duyệt -> Hiện Sửa | Xóa | Khóa -->
+                          <tr>
+                              <td><div style="width:40px; height:40px; background:#f0f0f0; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:20px;">👜</div></td>
+                              <td class="order-id">TOT-ECO</td>
+                              <td><strong>Túi Tote Canvas thân thiện môi trường</strong></td>
+                              <td>Phụ kiện</td>
+                              <td><span class="meta">1 Size · 2 Màu</span></td>
+                              <td class="num">95.000đ</td>
+                              <td><span class="pill green"><span class="dot"></span>Đã duyệt</span></td>
+                              <td>
+                                  <div class="action-menu">
+                                      <span class="action-link" onclick="openProductModal('edit', 'TOT-ECO')">Sửa</span> |
+                                      <span class="action-link" style="color: var(--red);" onclick="toast('Đã xóa sản phẩm')">Xóa</span> |
+                                      <span class="action-link" style="color: var(--amber);" onclick="toast('Đã khóa sản phẩm')">Khóa</span>
+                                  </div>
+                              </td>
+                          </tr>
+
+                          <!-- SP Bị khóa -> Hiện Sửa | Xóa | Mở khóa -->
+                          <tr>
+                              <td><div style="width:40px; height:40px; background:#f0f0f0; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:20px;">🖼️</div></td>
+                              <td class="order-id">POS-A3</td>
+                              <td><strong>Poster dán tường Matte A3</strong></td>
+                              <td>Trang trí nhà</td>
+                              <td><span class="meta">3 Kích thước</span></td>
+                              <td class="num">65.000đ</td>
+                              <td><span class="pill red"><span class="dot"></span>Bị khóa</span></td>
+                              <td>
+                                  <div class="action-menu">
+                                      <span class="action-link" onclick="openProductModal('edit', 'POS-A3')">Sửa</span> |
+                                      <span class="action-link" style="color: var(--red);" onclick="toast('Đã xóa sản phẩm')">Xóa</span> |
+                                      <span class="action-link" style="color: #00875a;" onclick="toast('Đã mở khóa sản phẩm')">Mở khóa</span>
+                                  </div>
+                              </td>
+                          </tr>
+
+                          <!-- SP Đã duyệt -> Hiện Sửa | Xóa | Khóa -->
+                          <tr>
+                              <td><div style="width:40px; height:40px; background:#f0f0f0; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:20px;">🧊</div></td>
+                              <td class="order-id">BOT-500</td>
+                              <td><strong>Bình giữ nhiệt Inox khắc Laser 500ml</strong></td>
+                              <td>Cốc & Bình nước</td>
+                              <td><span class="meta">1 Size · 4 Màu</span></td>
+                              <td class="num">195.000đ</td>
+                              <td><span class="pill green"><span class="dot"></span>Đã duyệt</span></td>
+                              <td>
+                                  <div class="action-menu">
+                                      <span class="action-link" onclick="openProductModal('edit', 'BOT-500')">Sửa</span> |
+                                      <span class="action-link" style="color: var(--red);" onclick="toast('Đã xóa sản phẩm')">Xóa</span> |
+                                      <span class="action-link" style="color: var(--amber);" onclick="toast('Đã khóa sản phẩm')">Khóa</span>
+                                  </div>
+                              </td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+
+          <!-- ============ QUẢN LÝ DANH MỤC ============ -->
+          <div class="tab-content" id="page-categories">
+              <div class="panel">
+                  <div class="panel-head">
+                      <div>
+                          <h3>Quản lý danh mục sản phẩm</h3>
+                          <div class="panel-subtitle">Phân loại và sắp xếp các mặt hàng Print-on-Demand</div>
+                      </div>
+                      <div class="inline-actions">
+                          <button class="btn primary" onclick="toast('Tính năng tạo danh mục đang phát triển')">+ Tạo danh mục</button>
+                      </div>
+                  </div>
+                  <div class="table-wrap">
+                      <table>
+                          <thead>
+                          <tr>
+                              <th>Tên danh mục</th>
+                              <th>Mô tả</th>
+                              <th>Số lượng SP</th>
+                              <th>Trạng thái</th>
+                              <th>Thao tác</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <tr>
+                              <td><strong>Thời trang (Apparel)</strong></td>
+                              <td>Áo thun, áo khoác, hoodie, quần...</td>
+                              <td class="num">142</td>
+                              <td><span class="pill green"><span class="dot"></span>Đang hoạt động</span></td>
+                              <td><span class="action-link" onclick="toast('Mở sửa danh mục')">Sửa</span></td>
+                          </tr>
+                          <tr>
+                              <td><strong>Cốc & Bình nước (Drinkware)</strong></td>
+                              <td>Cốc sứ, bình giữ nhiệt, ly thủy tinh...</td>
+                              <td class="num">58</td>
+                              <td><span class="pill green"><span class="dot"></span>Đang hoạt động</span></td>
+                              <td><span class="action-link" onclick="toast('Mở sửa danh mục')">Sửa</span></td>
+                          </tr>
+                          <tr>
+                              <td><strong>Phụ kiện (Accessories)</strong></td>
+                              <td>Túi tote, ốp lưng điện thoại, móc khóa...</td>
+                              <td class="num">36</td>
+                              <td><span class="pill green"><span class="dot"></span>Đang hoạt động</span></td>
+                              <td><span class="action-link" onclick="toast('Mở sửa danh mục')">Sửa</span></td>
+                          </tr>
+                          <tr>
+                              <td><strong>Trang trí nhà (Home Decor)</strong></td>
+                              <td>Poster, canvas, gối sofa, thảm...</td>
+                              <td class="num">12</td>
+                              <td><span class="pill amber"><span class="dot"></span>Tạm Ẩn</span></td>
+                              <td><span class="action-link" onclick="toast('Mở sửa danh mục')">Sửa</span></td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+
+          <!-- ============ KHO MÔ HÌNH 3D ============ -->
+          <div class="tab-content" id="page-3d-models">
+              <div class="panel">
+                  <div class="panel-head">
+                      <div>
+                          <h3>Kho lưu trữ file 3D (Render cho Web)</h3>
+                          <div class="panel-subtitle">Quản lý các file .glb / .gltf dùng để preview sản phẩm cho khách hàng</div>
+                      </div>
+                      <div class="inline-actions">
+                          <button class="btn primary" onclick="toast('Đang mở hộp thoại tải file 3D...')">↑ Upload File 3D</button>
+                      </div>
+                  </div>
+                  <div class="table-wrap">
+                      <table>
+                          <thead>
+                          <tr>
+                              <th>Tên File</th>
+                              <th>Loại File</th>
+                              <th>Kích thước</th>
+                              <th>Liên kết SP</th>
+                              <th>Ngày tải lên</th>
+                              <th>Thao tác</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <tr>
+                              <td><strong>t-shirt-basic-v2.glb</strong></td>
+                              <td><span class="pill blue">.glb</span></td>
+                              <td>3.2 MB</td>
+                              <td>3 Sản phẩm</td>
+                              <td>15/09/2026</td>
+                              <td>
+                                  <span class="action-link" onclick="toast('Đang mở trình xem 3D')">Preview</span> |
+                                  <span class="action-link" onclick="toast('Mở sửa file')">Sửa</span>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td><strong>ceramic-mug-11oz.gltf</strong></td>
+                              <td><span class="pill blue">.gltf</span></td>
+                              <td>1.8 MB</td>
+                              <td>1 Sản phẩm</td>
+                              <td>10/09/2026</td>
+                              <td>
+                                  <span class="action-link" onclick="toast('Đang mở trình xem 3D')">Preview</span> |
+                                  <span class="action-link" onclick="toast('Mở sửa file')">Sửa</span>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td><strong>tote-bag-canvas.glb</strong></td>
+                              <td><span class="pill blue">.glb</span></td>
+                              <td>4.5 MB</td>
+                              <td>1 Sản phẩm</td>
+                              <td>05/09/2026</td>
+                              <td>
+                                  <span class="action-link" onclick="toast('Đang mở trình xem 3D')">Preview</span> |
+                                  <span class="action-link" onclick="toast('Mở sửa file')">Sửa</span>
+                              </td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+
+      </div> <!-- THẺ ĐÓNG DIV.CONTENT ĐÃ ĐƯỢC CHUYỂN XUỐNG ĐÂY -->
       <!-- ============ DASHBOARD ============ -->
       <div class="tab-content active" id="page-dashboard">
         <div class="alert">
@@ -1111,97 +1380,176 @@
 </div>
 
 <!-- ===== DISPUTE MODAL ===== -->
-<div class="overlay" id="overlay" onclick="closeAll()"></div>
 <div class="modal" id="disputeModal">
-  <div class="modal-box">
-    <button class="modal-close" onclick="closeAll()">✕</button>
-    <h3 id="dmId">#PK-08228</h3>
-    <div class="sub" id="dmDesc">Khách báo lỗi in sai màu — chờ xưởng phản hồi</div>
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeAll()">✕</button>
+        <h3 id="dmId">#PK-08228</h3>
+        <div class="sub" id="dmDesc">Khách báo lỗi in sai màu — chờ xưởng phản hồi</div>
 
-    <div class="detail-grid">
-      <div class="field"><label>Khách hàng</label><strong>Quà Tặng Việt</strong></div>
-      <div class="field"><label>Xưởng in</label><strong>Sài Gòn Print</strong></div>
-      <div class="field"><label>Giá trị đơn</label><strong class="num">6.250.000đ</strong></div>
-      <div class="field"><label>Trạng thái</label><strong id="dmStatus">Khẩn cấp</strong></div>
-    </div>
+        <div class="detail-grid">
+            <div class="field"><label>Khách hàng</label><strong>Quà Tặng Việt</strong></div>
+            <div class="field"><label>Xưởng in</label><strong>Sài Gòn Print</strong></div>
+            <div class="field"><label>Giá trị đơn</label><strong class="num">6.250.000đ</strong></div>
+            <div class="field"><label>Trạng thái</label><strong id="dmStatus">Khẩn cấp</strong></div>
+        </div>
 
-    <h3 style="font-size:15px; margin-bottom:12px;">Lịch sử xử lý</h3>
-    <div class="detail-grid" style="grid-template-columns:1fr;">
-      <div class="field"><label>15/09 09:55 · Phạm Minh</label><strong style="font-size:13px;">Tạo tranh chấp — gửi ảnh sản phẩm lỗi</strong></div>
-      <div class="field"><label>15/09 10:05 · Hệ thống</label><strong style="font-size:13px;">Thông báo xưởng Sài Gòn Print</strong></div>
-      <div class="field"><label>Chờ xử lý</label><strong style="font-size:13px;">Đang đợi xưởng phản hồi trong 2 giờ</strong></div>
-    </div>
+        <h3 style="font-size:15px; margin-bottom:12px;">Lịch sử xử lý</h3>
+        <div class="detail-grid" style="grid-template-columns:1fr;">
+            <div class="field"><label>15/09 09:55 · Phạm Minh</label><strong style="font-size:13px;">Tạo tranh chấp — gửi ảnh sản phẩm lỗi</strong></div>
+            <div class="field"><label>15/09 10:05 · Hệ thống</label><strong style="font-size:13px;">Thông báo xưởng Sài Gòn Print</strong></div>
+            <div class="field"><label>Chờ xử lý</label><strong style="font-size:13px;">Đang đợi xưởng phản hồi trong 2 giờ</strong></div>
+        </div>
 
-    <div style="display:flex; gap:10px; margin-top:18px;">
-      <button class="btn primary" style="flex:1;" onclick="toast('Đã gửi phản hồi cho khách hàng')">Phản hồi khách</button>
-      <button class="btn danger" style="flex:1;" onclick="toast('Đã quyết định hoàn tiền cho khách')">Hoàn tiền</button>
+        <div style="display:flex; gap:10px; margin-top:18px;">
+            <button class="btn primary" style="flex:1;" onclick="toast('Đã gửi phản hồi cho khách hàng')">Phản hồi khách</button>
+            <button class="btn danger" style="flex:1;" onclick="toast('Đã quyết định hoàn tiền cho khách')">Hoàn tiền</button>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- ===== SUPPLIER MODAL ===== -->
 <div class="modal" id="supplierModal">
-  <div class="modal-box" style="width:520px;">
-    <button class="modal-close" onclick="closeAll()">✕</button>
-    <h3 id="smName">Sài Gòn Print</h3>
-    <div class="sub" id="smRegion">TP.HCM · Đối tác từ 2024</div>
+    <div class="modal-box" style="width:520px;">
+        <button class="modal-close" onclick="closeAll()">✕</button>
+        <h3 id="smName">Sài Gòn Print</h3>
+        <div class="sub" id="smRegion">TP.HCM · Đối tác từ 2024</div>
 
-    <div class="detail-grid">
-      <div class="field"><label>Đơn tháng này</label><strong id="smOrders" class="num">142</strong></div>
-      <div class="field"><label>Hiệu suất</label><strong id="smPerf">92%</strong></div>
-      <div class="field"><label>Đánh giá</label><strong id="smRating">4.9 ★</strong></div>
-      <div class="field"><label>Tỉ lệ đúng hạn</label><strong>96%</strong></div>
-    </div>
+        <div class="detail-grid">
+            <div class="field"><label>Đơn tháng này</label><strong id="smOrders" class="num">142</strong></div>
+            <div class="field"><label>Hiệu suất</label><strong id="smPerf">92%</strong></div>
+            <div class="field"><label>Đánh giá</label><strong id="smRating">4.9 ★</strong></div>
+            <div class="field"><label>Tỉ lệ đúng hạn</label><strong>96%</strong></div>
+        </div>
 
-    <h3 style="font-size:15px; margin-bottom:12px;">Chỉ số chi tiết</h3>
-    <div class="list-item" style="padding-left:0; padding-right:0;">
-      <div><div class="name">Thời gian sản xuất TB</div><div class="meta">42 giờ · Nhanh hơn 12% mức chuẩn</div></div>
-    </div>
-    <div class="list-item" style="padding-left:0; padding-right:0;">
-      <div><div class="name">Tỉ lệ lỗi in</div><div class="meta">1,2% · Thấp hơn mức cho phép</div></div>
-    </div>
-    <div class="list-item" style="padding-left:0; padding-right:0;">
-      <div><div class="name">Tỉ lệ hủy đơn</div><div class="meta">0,4% · Rất thấp</div></div>
-    </div>
+        <h3 style="font-size:15px; margin-bottom:12px;">Chỉ số chi tiết</h3>
+        <div class="list-item" style="padding-left:0; padding-right:0;">
+            <div><div class="name">Thời gian sản xuất TB</div><div class="meta">42 giờ · Nhanh hơn 12% mức chuẩn</div></div>
+        </div>
+        <div class="list-item" style="padding-left:0; padding-right:0;">
+            <div><div class="name">Tỉ lệ lỗi in</div><div class="meta">1,2% · Thấp hơn mức cho phép</div></div>
+        </div>
+        <div class="list-item" style="padding-left:0; padding-right:0;">
+            <div><div class="name">Tỉ lệ hủy đơn</div><div class="meta">0,4% · Rất thấp</div></div>
+        </div>
 
-    <div style="display:flex; gap:10px; margin-top:18px;">
-      <button class="btn" style="flex:1;" onclick="toast('Đã gửi tin nhắn cho xưởng')">Nhắn tin</button>
-      <button class="btn primary" style="flex:1;" onclick="toast('Đã mở trang quản lý xưởng')">Quản lý</button>
+        <div style="display:flex; gap:10px; margin-top:18px;">
+            <button class="btn" style="flex:1;" onclick="toast('Đã gửi tin nhắn cho xưởng')">Nhắn tin</button>
+            <button class="btn primary" style="flex:1;" onclick="toast('Đã mở trang quản lý xưởng')">Quản lý</button>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- ===== ENTITY FORM MODAL ===== -->
 <div class="modal" id="entityModal" aria-hidden="true">
-  <div class="modal-box" id="entityModalBox">
-    <button class="modal-close" type="button" onclick="closeAll()">✕</button>
-    <h3 id="entityModalTitle">Cập nhật dữ liệu</h3>
-    <div class="sub" id="entityModalSubtitle"></div>
-    <form id="entityForm">
-      <div class="form-grid modal-form-grid" id="entityFormFields"></div>
-      <div class="modal-actions">
-        <button class="btn" type="button" onclick="closeAll()">Hủy</button>
-        <button class="btn primary" type="submit" id="entitySubmitButton">Lưu thay đổi</button>
-      </div>
-    </form>
-    <div id="entityInfoContent" hidden></div>
-  </div>
+    <div class="modal-box" id="entityModalBox">
+        <button class="modal-close" type="button" onclick="closeAll()">✕</button>
+        <h3 id="entityModalTitle">Cập nhật dữ liệu</h3>
+        <div class="sub" id="entityModalSubtitle"></div>
+        <form id="entityForm">
+            <div class="form-grid modal-form-grid" id="entityFormFields"></div>
+            <div class="modal-actions">
+                <button class="btn" type="button" onclick="closeAll()">Hủy</button>
+                <button class="btn primary" type="submit" id="entitySubmitButton">Lưu thay đổi</button>
+            </div>
+        </form>
+        <div id="entityInfoContent" hidden></div>
+    </div>
 </div>
 
 <!-- ===== CONFIRM MODAL ===== -->
 <div class="modal" id="confirmModal" aria-hidden="true">
-  <div class="modal-box confirm-box">
-    <button class="modal-close" type="button" onclick="closeAll()">✕</button>
-    <div class="confirm-icon">!</div>
-    <h3 id="confirmTitle">Xác nhận thao tác</h3>
-    <div class="sub" id="confirmMessage"></div>
-    <div class="modal-actions">
-      <button class="btn" type="button" onclick="closeAll()">Hủy</button>
-      <button class="btn danger" type="button" id="confirmButton">Xác nhận</button>
+    <div class="modal-box confirm-box">
+        <button class="modal-close" type="button" onclick="closeAll()">✕</button>
+        <div class="confirm-icon">!</div>
+        <h3 id="confirmTitle">Xác nhận thao tác</h3>
+        <div class="sub" id="confirmMessage"></div>
+        <div class="modal-actions">
+            <button class="btn" type="button" onclick="closeAll()">Hủy</button>
+            <button class="btn danger" type="button" id="confirmButton">Xác nhận</button>
+        </div>
     </div>
-  </div>
 </div>
 
+<!-- THẺ OVERLAY NỀN ĐEN - CHỈ ĐỂ DUY NHẤT 1 CÁI Ở ĐÂY -->
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
+
+<!-- ===== PRODUCT MODAL (GIAO DIỆN CHUẨN) ===== -->
+<div class="modal" id="productModal">
+    <div class="modal-box" style="width: 760px; padding: 32px; border-radius: 12px; max-width: 95vw; position: relative;">
+
+        <!-- Nút Tắt -->
+        <button class="modal-close" onclick="closeAll()" style="position: absolute; top: 24px; right: 24px; background: transparent; border: none; font-size: 20px; color: #5c5f62; cursor: pointer; padding: 4px;">✕</button>
+
+        <!-- Tiêu đề -->
+        <div style="margin-bottom: 28px;">
+            <h3 id="productModalTitle" style="margin: 0; font-size: 22px; font-weight: 700; color: #202223;">Thêm sản phẩm</h3>
+            <div class="sub" style="margin-top: 6px; color: #6d7175; font-size: 14px;">Tạo sản phẩm Print-on-Demand mới vào hệ thống</div>
+        </div>
+
+        <!-- Lưới 2 cột chứa Form -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px 24px; margin-bottom: 30px;">
+            <!-- Cột 1 -->
+            <div>
+                <label style="display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; color: #6d7175; margin-bottom: 8px; letter-spacing: 0.5px;">TÊN SẢN PHẨM</label>
+                <input type="text" style="width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; font-size: 14px; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='#2c6ecb'" onblur="this.style.borderColor='#c9cccf'">
+            </div>
+            <!-- Cột 2 -->
+            <div>
+                <label style="display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; color: #6d7175; margin-bottom: 8px; letter-spacing: 0.5px;">MÃ SKU</label>
+                <input type="text" style="width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; font-size: 14px; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='#2c6ecb'" onblur="this.style.borderColor='#c9cccf'">
+            </div>
+            <!-- Cột 1 -->
+            <div>
+                <label style="display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; color: #6d7175; margin-bottom: 8px; letter-spacing: 0.5px;">DANH MỤC</label>
+                <select style="width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; font-size: 14px; outline: none; appearance: none; background: #fff url('data:image/svg+xml;utf8,<svg viewBox=\'0 0 14 8\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M1 1L7 7L13 1\' stroke=\'%23555\' stroke-width=\'2\' fill=\'none\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/></svg>') no-repeat right 12px center; background-size: 10px;">
+                    <option>Thời trang</option>
+                    <option>Cốc & Bình nước</option>
+                    <option>Phụ kiện</option>
+                    <option>Trang trí nhà</option>
+                </select>
+            </div>
+            <!-- Cột 2 -->
+            <div>
+                <label style="display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; color: #6d7175; margin-bottom: 8px; letter-spacing: 0.5px;">GIÁ BÁN GỐC (VNĐ)</label>
+                <input type="number" style="width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; font-size: 14px; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='#2c6ecb'" onblur="this.style.borderColor='#c9cccf'">
+            </div>
+            <!-- Cột 1 -->
+            <div>
+                <label style="display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; color: #6d7175; margin-bottom: 8px; letter-spacing: 0.5px;">CÁC BIẾN THỂ</label>
+                <input type="text" placeholder="Size S, M, L..." style="width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; font-size: 14px; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='#2c6ecb'" onblur="this.style.borderColor='#c9cccf'">
+            </div>
+            <!-- Cột 2 -->
+            <div>
+                <label style="display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; color: #6d7175; margin-bottom: 8px; letter-spacing: 0.5px;">TRẠNG THÁI</label>
+                <select style="width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #c9cccf; border-radius: 6px; font-size: 14px; outline: none; appearance: none; background: #fff url('data:image/svg+xml;utf8,<svg viewBox=\'0 0 14 8\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M1 1L7 7L13 1\' stroke=\'%23555\' stroke-width=\'2\' fill=\'none\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/></svg>') no-repeat right 12px center; background-size: 10px;">
+                    <option>Chờ duyệt</option>
+                    <option>Đã duyệt</option>
+                </select>
+            </div>
+            <!-- Cột 1 -->
+            <div>
+                <label style="display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; color: #6d7175; margin-bottom: 8px; letter-spacing: 0.5px;">ẢNH THUMBNAIL</label>
+                <div style="border: 1px solid #c9cccf; border-radius: 6px; padding: 7px 12px;">
+                    <input type="file" accept=".jpg,.png,.jpeg" style="width: 100%; font-size: 14px; outline: none; border:none; background: transparent;">
+                </div>
+            </div>
+            <!-- Cột 2 -->
+            <div>
+                <label style="display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; color: #6d7175; margin-bottom: 8px; letter-spacing: 0.5px;">FILE 3D (.GLB, .GLTF)</label>
+                <div style="border: 1px solid #c9cccf; border-radius: 6px; padding: 7px 12px;">
+                    <input type="file" accept=".glb,.gltf" style="width: 100%; font-size: 14px; outline: none; border:none; background: transparent;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Khu vực Nút (Căn phải) -->
+        <div style="display: flex; gap: 12px; justify-content: flex-end; padding-top: 10px;">
+            <button onclick="closeAll()" style="padding: 10px 24px; background: #fff; border: 1px solid #c9cccf; border-radius: 6px; color: #202223; font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f6f6f7'" onmouseout="this.style.background='#fff'">Hủy</button>
+            <button onclick="toast('Đã lưu thông tin sản phẩm thành công!'); closeAll()" style="padding: 10px 24px; background: #3366ff; border: none; border-radius: 6px; color: #fff; font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#2850cc'" onmouseout="this.style.background='#3366ff'">Lưu sản phẩm</button>
+        </div>
+
+    </div>
+</div>
 <div class="toast" id="toast">Đã thực hiện</div>
 
 <script src="admin.js"></script>

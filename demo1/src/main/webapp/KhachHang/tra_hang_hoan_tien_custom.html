@@ -80,6 +80,8 @@
       justify-content: space-between;
     }
 
+    .utility b, .utility a{color:var(--amber); font-weight:600;}
+
     header {
       background: rgba(253, 249, 243, 0.88);
       backdrop-filter: blur(14px);
@@ -141,15 +143,6 @@
       box-shadow: 0 6px 16px rgba(108, 92, 231, 0.30);
     }
     
-    .search-wrap{
-      flex:0 1 250px; display:flex; min-width:0;
-      background:var(--surface); border:1.5px solid var(--line-strong); border-radius:999px;
-      overflow:hidden; transition:.2s; box-shadow:var(--shadow-xs);
-    }
-    .search-wrap:focus-within{border-color:var(--violet); box-shadow:0 0 0 4px rgba(108,92,231,0.14);}
-    .search-wrap input{border:none; outline:none; background:transparent; padding:10px 18px; font-size:14px; flex:1; min-width:0;}
-    .search-wrap button{background:var(--grad-primary); color:white; border:none; padding:0 18px; font-weight:600; font-size:13.5px;}
-
     .head-actions {
       display: flex;
       align-items: center;
@@ -281,33 +274,30 @@
 
   <!-- ============ UTILITY BAR ============ -->
   <div class="utility">
-    <span>🚚 Miễn phí thiết kế mockup cho đơn từ 20 sản phẩm — <b>Voucher 100K</b> cho đơn đầu tiên</span>
-    <span>Hỗ trợ: <b>1900 6868</b> · Theo dõi đơn hàng · <a href="#" onclick="openLogin();return false;">Đăng nhập</a></span>
+    <span>🖨️ In 3D theo yêu cầu &amp; sản phẩm mẫu sẵn — <b>Báo giá trong 2 giờ</b></span>
+    <span>Hỗ trợ: <b>1900 6868</b> · <a href="don_hang_cua_toi_3d.html">Theo dõi đơn hàng</a> · <a href="../Auth/Đăng-nhập.html">Đăng nhập</a></span>
   </div>
 
   <!-- ============ HEADER ============ -->
   <header>
-    <a href="#" class="logo"><span class="mark"></span> PrintKraft</a>
+    <a href="trang_chu.html" class="logo"><span class="mark"></span> PrintKraft</a>
     <nav id="mainNav">
-      <a href="#home"        data-tab="home">Trang chủ</a>
-      <a href="#san-pham"    data-tab="san-pham">Sản phẩm</a>
-      <a href="#studio"      data-tab="studio">Tự thiết kế</a>
-      <a href="#doanh-nghiep" data-tab="doanh-nghiep">Doanh nghiệp</a>
-      <a href="#nhacungcap"  data-tab="nhacungcap">Nhà cung cấp</a>
-      <a href="#donhang"     data-tab="donhang">Đơn hàng</a>
-      <a href="#trahang"     data-tab="trahang" class="active">Trả hàng & Hoàn tiền</a>
-      <a href="#danhgia"     data-tab="danhgia">Đánh giá</a>
-      <a href="#faq"         data-tab="faq">Hỗ trợ</a>
+      <a href="trang_chu.html">Trang chủ</a>
+      <a href="san-pham.html">Sản phẩm</a>
+      <a href="dat_in_3d.html">Đặt in 3D</a>
+      <a href="tim-kiem-nha-cung-cap.html">Nhà cung cấp</a>
+      <a href="danh-muc-yeu-thich.html">Yêu thích</a>
+      <a href="don_hang_cua_toi_3d.html">Đơn hàng</a>
+      <a href="tra_hang_hoan_tien_custom.html" class="active">Trả hàng &amp; Hoàn tiền</a>
+      <a href="danh-gia.html">Đánh giá</a>
+      <a href="lien-he.html">Liên hệ</a>
+      <a href="phan-hoi.html">Phản hồi</a>
     </nav>
-    <div class="search-wrap">
-      <input type="text" placeholder="Tìm áo thun, cốc sứ, poster...">
-      <button>Tìm</button>
-    </div>
     <div class="head-actions">
       <div id="authArea">
-        <a href="#" onclick="openLogin();return false;" style="font-weight:600;">Tài khoản</a>
+        <a href="../Auth/Đăng-nhập.html" style="font-weight:600;">Tài khoản</a>
       </div>
-      <button class="cart-btn" onclick="openCart()">🛒 Giỏ hàng <span class="badge" id="cartBadge">3</span></button>
+      <button class="cart-btn" onclick="location.href='Thanh_toan_gio_hang.html'">🛒 Giỏ hàng <span class="badge" id="cartBadge">3</span></button>
     </div>
   </header>
 
@@ -347,11 +337,11 @@
       <div style="display:flex; gap:24px;">
         <div
           style="width:80px; height:80px; background:var(--cream); border-radius:12px; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:24px;">
-          👕</div>
+          🤖</div>
         <div style="flex:1;">
-          <h4 style="font-size:16px; margin-bottom:4px;">Áo thun DTG Oversize (Đơn #PK-08230)</h4>
-          <p style="font-size:13.5px; color:var(--ink-soft); margin-bottom:4px;">Lý do: In sai màu so với thiết kế (Màu
-            đỏ bị ám cam).</p>
+          <h4 style="font-size:16px; margin-bottom:4px;">Mô hình Gundam RX-78-2 (Đơn #PK-08230)</h4>
+          <p style="font-size:13.5px; color:var(--ink-soft); margin-bottom:4px;">Lý do: In lỗi lớp, bề mặt bị nứt và cong
+            vênh so với mô hình gốc.</p>
           <p style="font-size:13.5px;">Yêu cầu: <strong style="color:var(--violet);">Hoàn tiền 100% (350.000đ)</strong>
           </p>
         </div>
@@ -376,10 +366,10 @@
       <div style="display:flex; gap:24px;">
         <div
           style="width:80px; height:80px; background:var(--cream); border-radius:12px; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:24px;">
-          ☕</div>
+          💡</div>
         <div style="flex:1;">
-          <h4 style="font-size:16px; margin-bottom:4px;">Cốc sứ Sublimation x30 (Đơn #PK-08005)</h4>
-          <p style="font-size:13.5px; color:var(--ink-soft); margin-bottom:4px;">Lý do: Vỡ 3 cái do đóng gói sơ sài.</p>
+          <h4 style="font-size:16px; margin-bottom:4px;">Đèn ngủ in 3D hình rồng x30 (Đơn #PK-08005)</h4>
+          <p style="font-size:13.5px; color:var(--ink-soft); margin-bottom:4px;">Lý do: Nứt 3 cái do đóng gói sơ sài.</p>
           <p style="font-size:13.5px;">Yêu cầu: <strong style="color:var(--violet);">Hoàn tiền một phần
               (450.000đ)</strong></p>
         </div>
@@ -403,8 +393,8 @@
           Đơn hàng</label>
         <select
           style="width:100%; padding:12px; border:1.5px solid var(--line); border-radius:var(--r-sm); font-size:14px; outline:none; background:#FBF9FF;">
-          <option>#PK-08240 - Túi vải canvas</option>
-          <option>#PK-08235 - Cốc sứ</option>
+          <option>#PK-08240 - Đèn ngủ in 3D hình rồng</option>
+          <option>#PK-08235 - Mô hình Gundam RX-78-2</option>
         </select>
       </div>
       <div style="margin-bottom:16px;">
@@ -457,7 +447,7 @@
             <div>
               <div class="chat-meta"><span>Bạn (Khách hàng)</span> <span>• 05/09 09:30</span></div>
               <div class="chat-bubble">
-                Ly sứ bị vỡ 3 cái do đóng gói sơ sài. Tôi yêu cầu hoàn tiền 450.000đ.<br>
+                Đèn in 3D bị nứt 3 cái do đóng gói sơ sài. Tôi yêu cầu hoàn tiền 450.000đ.<br>
                 <div class="attachment">📎 anh_ly_vo.jpg</div>
               </div>
             </div>
@@ -479,7 +469,7 @@
             <div>
               <div class="chat-meta"><span>Quản trị viên PrintKraft</span> <span>• 06/09 14:20</span></div>
               <div class="chat-bubble">
-                Theo hình ảnh, xốp bọc ly chưa đủ tiêu chuẩn vận chuyển hàng dễ vỡ. <br><br>
+                Theo hình ảnh, xốp bọc sản phẩm chưa đủ tiêu chuẩn vận chuyển hàng dễ vỡ. <br><br>
                 <strong>Quyết định sơ bộ:</strong> Xưởng chịu 50%, PrintKraft chịu 50% chi phí. Chờ xưởng xác nhận.
               </div>
             </div>
@@ -494,6 +484,7 @@
     </div>
   </div>
 
+<script src="../site-auth.js"></script>
 </body>
 
 </html>

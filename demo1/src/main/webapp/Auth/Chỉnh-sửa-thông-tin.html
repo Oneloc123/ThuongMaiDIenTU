@@ -9,14 +9,30 @@
 </head>
 <body data-t="kh">
 
-<nav class="sw" aria-label="Điều hướng">
-  <a href="Auth/Đăng-nhập.html">Đăng nhập</a>
-  <a href="Auth/Tạo-tài-khoản.html">Tạo tài khoản</a>
-  <a href="Auth/Đăng-ký-NCC.html">Đăng ký NCC</a>
-  <a href="Auth/Quên-mật-khẩu.html">Quên mật khẩu</a>
-  <a href="Auth/Chỉnh-sửa-thông-tin.html" class="on">Chỉnh sửa thông tin</a>
-  <a href="Auth/Quản-lý-tài-khoản.html">Quản lý tài khoản</a>
-</nav>
+<div class="pk-utility">
+  <span>🖨️ In 3D theo yêu cầu &amp; sản phẩm mẫu sẵn — <b>Báo giá trong 2 giờ</b></span>
+  <span>Hỗ trợ: <b>1900 6868</b> · <a href="../KhachHang/don_hang_cua_toi_3d.html">Theo dõi đơn hàng</a> · <a href="Đăng-nhập.html">Đăng nhập</a></span>
+</div>
+
+<header class="pk-header">
+  <a href="../KhachHang/trang_chu.html" class="pk-logo"><span class="pk-mark"></span> PrintKraft</a>
+  <nav class="pk-nav">
+    <a href="../KhachHang/trang_chu.html">Trang chủ</a>
+    <a href="../KhachHang/san-pham.html">Sản phẩm</a>
+    <a href="../KhachHang/dat_in_3d.html">Đặt in 3D</a>
+    <a href="../KhachHang/tim-kiem-nha-cung-cap.html">Nhà cung cấp</a>
+    <a href="../KhachHang/danh-muc-yeu-thich.html">Yêu thích</a>
+    <a href="../KhachHang/don_hang_cua_toi_3d.html">Đơn hàng</a>
+    <a href="../KhachHang/tra_hang_hoan_tien_custom.html">Trả hàng &amp; Hoàn tiền</a>
+    <a href="../KhachHang/danh-gia.html">Đánh giá</a>
+    <a href="../KhachHang/lien-he.html">Liên hệ</a>
+    <a href="../KhachHang/phan-hoi.html">Phản hồi</a>
+  </nav>
+  <div class="head-actions">
+    <a href="Đăng-nhập.html" style="font-weight:600;">Tài khoản</a>
+    <button class="pk-cart" onclick="location.href='../KhachHang/Thanh_toan_gio_hang.html'">🛒 Giỏ hàng <span class="pk-badge" id="cartBadge">0</span></button>
+  </div>
+</header>
 
 <main class="screen on kh" id="profile" data-t="kh">
   <div class="card w">
@@ -42,7 +58,7 @@
         <div class="field"><label for="p7">Mật khẩu mới</label><input id="p7" type="password" minlength="8" placeholder="Tối thiểu 8 ký tự"></div>
         <div class="field"><label for="p8">Nhập lại mật khẩu mới</label><input id="p8" type="password" minlength="8"></div>
       </div>
-      <div class="actions"><a class="btn o auto" href="Auth/Đăng-nhập.html">Hủy</a><button class="btn auto">Lưu thay đổi</button></div>
+      <div class="actions"><a class="btn o auto" href="Đăng-nhập.html">Hủy</a><button class="btn auto">Lưu thay đổi</button></div>
     </form>
   </div>
 </main>
@@ -50,6 +66,6 @@
 <div class="toast" id="toast" role="status"></div>
 
 <script src="auth.js"></script>
+<script src="../site-auth.js"></script>
 </body>
-</html></body>
 </html>

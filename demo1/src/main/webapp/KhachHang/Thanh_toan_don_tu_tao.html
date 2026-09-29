@@ -47,7 +47,7 @@
     color:rgba(253,249,243,0.82); font-size:12.5px; padding:9px 32px;
     display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
   }
-  .utility b{color:var(--amber); font-weight:600;}
+  .utility b, .utility a{color:var(--amber); font-weight:600;}
   header{
     background:rgba(253,249,243,0.9); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
     border-bottom:1px solid var(--line); padding:12px 32px;
@@ -65,6 +65,16 @@
   .steps-bar .s.active span{color:var(--violet);}
   .steps-bar .s.done .n{background:var(--grad-cool); color:#063a2e;}
   .steps-bar .sep{width:26px; height:2px; background:#EDEBF5; border-radius:999px;}
+  /* Nav dùng chung */
+  header nav{display:flex; gap:4px; font-size:14px; font-weight:500; overflow-x:auto; scrollbar-width:none; flex:1; min-width:0; padding:2px;}
+  header nav::-webkit-scrollbar{display:none;}
+  header nav a{padding:9px 14px; border-radius:999px; white-space:nowrap; color:var(--ink-soft); transition:.18s; flex-shrink:0;}
+  header nav a:hover{background:rgba(108,92,231,0.10); color:var(--violet);}
+  header nav a.active{background:var(--grad-primary); color:#fff; box-shadow:0 6px 16px rgba(108,92,231,0.30);}
+  .head-actions{margin-left:auto; display:flex; align-items:center; gap:14px; font-size:13px; font-weight:500; flex-shrink:0;}
+  .cart-btn{display:flex; align-items:center; gap:7px; background:var(--grad-warm); color:white; padding:10px 16px; border-radius:999px; font-weight:600; font-size:13.5px; box-shadow:0 8px 20px rgba(255,107,107,0.32); transition:.18s; white-space:nowrap;}
+  .cart-btn:hover{transform:translateY(-2px);}
+  .badge{background:rgba(255,255,255,0.28); border-radius:999px; padding:1px 8px; font-size:11.5px;}
 
   /* ===== Layout ===== */
   .breadcrumb{max-width:1180px; margin:26px auto 0; padding:0 32px; font-size:13px; color:var(--ink-soft);}
@@ -337,11 +347,27 @@
 
 <!-- ============ TOP ============ -->
 <div class="utility">
-  <span>🔒 Thanh toán an toàn — mã hóa SSL 256-bit · <b>Hoàn tiền 100%</b> nếu lỗi từ xưởng</span>
+  <span>🖨️ In 3D theo yêu cầu &amp; sản phẩm mẫu sẵn — <b>Báo giá trong 2 giờ</b></span>
   <span>Hỗ trợ: <b>1900 6868</b> · 8:00–21:00</span>
 </div>
 <header>
-  <a href="#" class="logo"><span class="mark"></span> PrintKraft</a>
+  <a href="trang_chu.html" class="logo"><span class="mark"></span> PrintKraft</a>
+  <nav>
+    <a href="trang_chu.html">Trang chủ</a>
+    <a href="san-pham.html">Sản phẩm</a>
+    <a href="dat_in_3d.html">Đặt in 3D</a>
+    <a href="tim-kiem-nha-cung-cap.html">Nhà cung cấp</a>
+    <a href="danh-muc-yeu-thich.html">Yêu thích</a>
+    <a href="don_hang_cua_toi_3d.html">Đơn hàng</a>
+    <a href="tra_hang_hoan_tien_custom.html">Trả hàng &amp; Hoàn tiền</a>
+    <a href="danh-gia.html">Đánh giá</a>
+    <a href="lien-he.html">Liên hệ</a>
+    <a href="phan-hoi.html">Phản hồi</a>
+  </nav>
+  <div class="head-actions">
+    <a href="../Auth/Đăng-nhập.html" style="font-weight:600;">Tài khoản</a>
+    <button class="cart-btn" onclick="location.href='Thanh_toan_gio_hang.html'">🛒 Giỏ hàng <span class="badge" id="cartBadge">0</span></button>
+  </div>
   <div class="steps-bar" id="topSteps">
     <div class="s active" data-s="1"><div class="n">1</div><span>Xác nhận đơn</span></div>
     <div class="sep"></div>
@@ -351,7 +377,7 @@
   </div>
 </header>
 
-<div class="breadcrumb"><a href="#">← Quay lại xưởng thiết kế</a></div>
+<div class="breadcrumb"><a href="dat_in_3d.html">← Quay lại xưởng thiết kế</a></div>
 
 <!-- ============ CHECKOUT VIEW ============ -->
 <main class="page" id="checkoutView">
@@ -374,14 +400,14 @@
           </div>
         </div>
         <div class="order-hero">
-          <div class="mockup-box"><span>LOGO<br>CỦA BẠN</span></div>
+          <div class="mockup-box"><span>MÔ HÌNH<br>CỦA BẠN</span></div>
           <div class="order-meta">
-            <h4>Áo thun Oversize Cotton</h4>
+            <h4>Mô hình Gundam RX-78-2</h4>
             <div class="oid">#PK-09001</div>
             <ul>
-              <li>Phương pháp in: <b>DTG (Direct to Garment)</b></li>
-              <li>Màu sản phẩm: <b>Tím Violet</b> · Size: <b>L / XL</b></li>
-              <li>Số lượng: <b>200 chiếc</b> · Đơn giá: <b>89.000đ</b></li>
+              <li>Công nghệ in: <b>FDM</b> · Vật liệu: <b>PLA</b></li>
+              <li>Màu mô hình: <b>Tím Violet</b> · Chiều cao: <b>30cm</b></li>
+              <li>Số lượng: <b>20 mô hình</b> · Đơn giá: <b>890.000đ</b></li>
               <li>Xưởng in: <b>Sài Gòn Print</b> · Dự kiến giao: <b>25/09/2026</b></li>
             </ul>
           </div>
@@ -479,7 +505,7 @@
     <aside class="col-side">
       <div class="summary">
         <h3>Chi tiết thanh toán</h3>
-        <div class="row"><span>Tạm tính (200 × 89.000đ)</span><span>17.800.000đ</span></div>
+        <div class="row"><span>Tạm tính (20 × 890.000đ)</span><span>17.800.000đ</span></div>
         <div class="row"><span>Phí thiết kế</span><span style="color:var(--teal-soft)">Miễn phí</span></div>
         <div class="row"><span>Phí in mẫu thử</span><span style="color:var(--teal-soft)">Miễn phí</span></div>
         <div class="row disc" id="discRow" style="display:none;"><span>Giảm giá thanh toán toàn bộ</span><b id="discVal">-890.000đ</b></div>
@@ -498,7 +524,7 @@
         <span class="badge-save" id="saveTag" style="display:none;">🎁 Tiết kiệm 890.000đ</span>
 
         <button class="btn-primary" style="margin-top:18px;" onclick="confirmPay()">🔒 Xác nhận & thanh toán</button>
-        <div class="sec-note">Bằng việc đặt hàng, bạn đồng ý với <a href="#" style="color:var(--violet-soft); text-decoration:underline;">Điều khoản dịch vụ</a> của PrintKraft.</div>
+        <div class="sec-note">Bằng việc đặt hàng, bạn đồng ý với <a href="phan-hoi.html" style="color:var(--violet-soft); text-decoration:underline;">Điều khoản dịch vụ</a> của PrintKraft.</div>
       </div>
 
       <div style="background:white; border:1px solid var(--line); border-radius:var(--r-md); padding:18px; margin-top:16px; box-shadow:var(--shadow-xs);">
@@ -532,7 +558,7 @@
     </div>
     <div class="tl-row">
       <div class="tl-dot active"></div>
-      <div class="tl-body"><strong>Đang in mẫu thử</strong><span>Xưởng chuẩn bị 1 áo mẫu để bạn duyệt</span></div>
+      <div class="tl-body"><strong>Đang in mẫu thử</strong><span>Xưởng chuẩn bị 1 mô hình mẫu để bạn duyệt</span></div>
       <div class="tl-time">Dự kiến 17/09</div>
     </div>
     <div class="tl-row">
@@ -542,7 +568,7 @@
     </div>
     <div class="tl-row">
       <div class="tl-dot"></div>
-      <div class="tl-body"><strong>Sản xuất hàng loạt</strong><span>200 áo · thời gian 3–4 ngày</span></div>
+      <div class="tl-body"><strong>Sản xuất hàng loạt</strong><span>20 mô hình · thời gian 3–4 ngày</span></div>
       <div class="tl-time">Dự kiến 22/09</div>
     </div>
     <div class="tl-row">
@@ -871,5 +897,6 @@ function backToCheckout(){
    ============================================================ */
 renderSchedule();
 </script>
+<script src="../site-auth.js"></script>
 </body>
 </html>

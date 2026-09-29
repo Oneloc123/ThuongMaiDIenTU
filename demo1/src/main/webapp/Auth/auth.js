@@ -58,6 +58,10 @@ document.addEventListener('submit', (e) => {
 
   /* Forgot password flow */
   const f = e.target;
+
+  /* Đăng nhập do site-auth.js xử lý */
+  if (f.dataset.act === 'login') return;
+
   if (f.dataset.act === 'forgot') {
     const input = f.querySelector('input[type="email"]');
     const email = input ? input.value.trim() : '';

@@ -531,3 +531,77 @@ tr:last-child td{border-bottom:0}
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important}
 }
+
+/* ============ PrintKraft site header (dùng chung cho trang Auth) ============ */
+.pk-utility{
+  background:linear-gradient(90deg,#1B1B2F 0%,#2D2B55 50%,#1B1B2F 100%);
+  color:rgba(253,249,243,.82);
+  font-size:12.5px; padding:9px 32px;
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+}
+.pk-utility b,.pk-utility a{color:#FFB347; font-weight:600}
+
+.pk-header{
+  position:sticky; top:env(safe-area-inset-top,0px); z-index:50;
+  background:rgba(253,249,243,.88);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(27,27,47,.10);
+  padding:12px 32px; display:flex; align-items:center; gap:16px;
+}
+.pk-logo{
+  font-size:22px; font-weight:700; display:flex; align-items:center; gap:10px;
+  white-space:nowrap; flex-shrink:0; color:#1B1B2F;
+  font-family:'Space Grotesk',sans-serif;
+}
+.pk-mark{
+  width:28px; height:28px; background:linear-gradient(135deg,#FF6B6B,#FFB347);
+  display:inline-block; transform:rotate(45deg); border-radius:8px;
+  box-shadow:0 6px 16px rgba(255,107,107,.4);
+}
+.pk-nav{
+  display:flex; gap:4px; font-size:14px; font-weight:500;
+  overflow-x:auto; scrollbar-width:none; flex:1; min-width:0; padding:2px;
+}
+.pk-nav::-webkit-scrollbar{display:none}
+.pk-nav a{
+  padding:9px 14px; border-radius:999px; white-space:nowrap;
+  color:#4A4A6A; transition:.18s; flex-shrink:0;
+  border:0; background:none; font-size:14px; font-weight:500;
+}
+.pk-nav a:hover{background:rgba(108,92,231,.10); color:#6C5CE7}
+.pk-nav a.on{background:linear-gradient(135deg,#6C5CE7,#A29BFE); color:#fff; box-shadow:0 6px 16px rgba(108,92,231,.30)}
+.pk-header .head-actions{
+  display:flex; align-items:center; gap:14px; font-size:13px; font-weight:500;
+  flex-shrink:0; margin-left:auto; color:#1B1B2F;
+}
+.pk-cart{
+  display:flex; align-items:center; gap:7px;
+  background:linear-gradient(135deg,#FF6B6B,#FFB347); color:#fff;
+  border:0; padding:10px 16px; border-radius:999px; font-weight:600; font-size:13.5px;
+  box-shadow:0 8px 20px rgba(255,107,107,.32); transition:.18s; white-space:nowrap;
+}
+.pk-cart:hover{transform:translateY(-2px)}
+.pk-badge{background:rgba(255,255,255,.28); border-radius:999px; padding:1px 8px; font-size:11.5px}
+
+/* Gợi ý tài khoản demo + báo lỗi đăng nhập */
+.pk-hint{
+  display:flex; gap:8px; align-items:center;
+  background:#FFF4E0; color:#8A5A00; border:1px dashed rgba(255,179,71,.7);
+  border-radius:10px; padding:10px 14px; font-size:13px; font-weight:600;
+  margin-bottom:16px;
+}
+.pk-err{
+  display:none; background:#FFECEC; color:#C0392B; border-radius:10px;
+  padding:10px 14px; font-size:13px; font-weight:500; margin-bottom:14px;
+}
+.pk-err.show{display:block}
+
+/* Trang Auth giờ có header cao hơn nav chip cũ */
+body:not([data-t=ad]) .screen{min-height:calc(100vh - 130px)}
+
+@media (max-width:980px){
+  .pk-utility{padding:8px 18px; font-size:11.5px}
+  .pk-header{padding:10px 18px; gap:12px; flex-wrap:wrap}
+  .pk-nav{order:3; flex-basis:100%; width:100%}
+  .pk-header .head-actions{margin-left:auto}
+}

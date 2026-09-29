@@ -53,6 +53,9 @@
   nav a:hover{background:rgba(108,92,231,0.10); color:var(--violet);}
   nav a.active{background:var(--grad-primary); color:#fff; box-shadow:0 6px 16px rgba(108,92,231,0.30);}
   .head-actions{margin-left:auto; display:flex; align-items:center; gap:12px;}
+  .cart-btn{display:flex; align-items:center; gap:7px; background:var(--grad-warm); color:white; padding:10px 16px; border-radius:999px; font-weight:600; font-size:13.5px; box-shadow:0 8px 20px rgba(255,107,107,0.32); transition:.18s; white-space:nowrap;}
+  .cart-btn:hover{transform:translateY(-2px);}
+  .badge{background:rgba(255,255,255,0.28); border-radius:999px; padding:1px 8px; font-size:11.5px;}
 
   .btn-primary{background:var(--grad-primary); color:white; padding:14px 26px; border-radius:var(--r-sm); font-weight:600; font-size:14.5px; display:inline-block; text-align:center; box-shadow:var(--shadow-glow); transition:.2s;}
   .btn-primary:hover{transform:translateY(-2px); box-shadow:0 18px 40px rgba(108,92,231,0.42);}
@@ -104,21 +107,27 @@
 <body>
 
   <div class="utility">
-    <span>🚚 Miễn phí thiết kế mockup cho đơn từ 20 sản phẩm — <b>Voucher 100K</b> cho đơn đầu tiên</span>
-    <span>Hỗ trợ: <b>1900 6868</b> · <a href="trang_chu.html">Về trang chủ PrintKraft</a></span>
+    <span>🖨️ In 3D theo yêu cầu &amp; sản phẩm mẫu sẵn — <b>Báo giá trong 2 giờ</b></span>
+    <span>Hỗ trợ: <b>1900 6868</b> · <a href="don_hang_cua_toi_3d.html">Theo dõi đơn hàng</a> · <a href="../Auth/Đăng-nhập.html">Đăng nhập</a></span>
   </div>
 
   <header>
     <a class="logo" href="trang_chu.html"><span class="mark"></span> PrintKraft</a>
     <nav>
+      <a href="trang_chu.html">Trang chủ</a>
+      <a href="san-pham.html">Sản phẩm</a>
+      <a href="dat_in_3d.html">Đặt in 3D</a>
       <a href="tim-kiem-nha-cung-cap.html">Nhà cung cấp</a>
       <a href="danh-muc-yeu-thich.html">Yêu thích</a>
+      <a href="don_hang_cua_toi_3d.html">Đơn hàng</a>
+      <a href="tra_hang_hoan_tien_custom.html">Trả hàng &amp; Hoàn tiền</a>
+      <a href="danh-gia.html">Đánh giá</a>
       <a href="lien-he.html" class="active">Liên hệ</a>
       <a href="phan-hoi.html">Phản hồi</a>
-      <a href="danh-gia.html">Đánh giá</a>
     </nav>
     <div class="head-actions">
-      <a class="btn-outline btn-sm" href="trang_chu.html">← Trang chủ</a>
+      <a href="../Auth/Đăng-nhập.html" style="font-weight:600;">Tài khoản</a>
+      <button class="cart-btn" onclick="location.href='Thanh_toan_gio_hang.html'">🛒 Giỏ hàng <span class="badge" id="cartBadge">0</span></button>
     </div>
   </header>
 
@@ -256,5 +265,6 @@ function sendChatMessage(){
   renderChat();
 })();
 </script>
+<script src="../site-auth.js"></script>
 </body>
 </html>

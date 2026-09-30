@@ -457,6 +457,58 @@
   .foot-inner li:hover{color:var(--violet); transform:translateX(3px);}
   .foot-bottom{max-width:1280px; margin:34px auto 0; padding-top:22px; border-top:1px solid var(--line); display:flex; justify-content:space-between; font-size:12.5px; color:var(--ink-soft); flex-wrap:wrap; gap:10px;}
 
+
+  /* ===== Xưởng đề xuất sau báo giá ===== */
+  .vendor-panel{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg);
+    padding:24px; box-shadow:var(--shadow-sm);
+  }
+  .vendor-panel h3{font-size:19px; margin-bottom:5px;}
+  .vendor-panel .sub{font-size:13.5px; color:var(--ink-soft); margin-bottom:18px;}
+  .vendor-recommend{
+    border:1.5px solid rgba(108,92,231,.35); border-radius:var(--r-md); padding:17px;
+    background:linear-gradient(135deg,#F7F4FF 0%,#FFF9F5 100%); margin-bottom:16px;
+  }
+  .vendor-recommend .top{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; margin-bottom:10px;}
+  .vendor-recommend h4{font-size:16px; margin-bottom:4px;}
+  .vendor-recommend p{font-size:12.5px; color:var(--ink-soft); line-height:1.5;}
+  .vendor-badge{display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; padding:5px 10px; border-radius:999px; background:#EEEAFE; color:var(--violet); white-space:nowrap;}
+  .vendor-why{display:flex; gap:7px; flex-wrap:wrap; margin-top:10px;}
+  .vendor-why span{font-size:11.5px; font-weight:600; color:var(--ink-soft); background:#fff; border:1px solid var(--line); padding:5px 9px; border-radius:999px;}
+  .vendor-toolbar{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; flex-wrap:wrap;}
+  .vendor-count{font-size:12.5px; color:var(--ink-soft); font-weight:600;}
+  .vendor-sort{width:auto; min-width:175px; border:1.5px solid var(--line); border-radius:9px; padding:9px 12px; background:#FBF9FF; font-size:12.5px; color:var(--ink);}
+  .vendor-list{display:grid; grid-template-columns:1fr; gap:11px;}
+  .vendor-card{
+    border:1.5px solid var(--line-strong); border-radius:var(--r-md); padding:15px; background:#fff;
+    transition:.18s; position:relative;
+  }
+  .vendor-card:hover{border-color:var(--violet); box-shadow:var(--shadow-xs); transform:translateY(-1px);}
+  .vendor-card.selected{border-color:var(--violet); background:#F8F6FF; box-shadow:0 0 0 4px rgba(108,92,231,.10);}
+  .vendor-card.recommended{border-color:rgba(108,92,231,.45);}
+  .vendor-card .vc-head{display:flex; justify-content:space-between; gap:12px; align-items:flex-start;}
+  .vendor-card .vc-name{display:flex; align-items:center; gap:9px; flex-wrap:wrap;}
+  .vendor-card .vc-name strong{font-family:'Space Grotesk'; font-size:15px;}
+  .vendor-card .vc-sub{font-size:12px; color:var(--ink-soft); margin-top:3px;}
+  .vendor-card .vc-score{font-family:'Space Grotesk'; font-weight:700; color:var(--violet); font-size:16px; white-space:nowrap;}
+  .vendor-card .vc-stats{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:12px 0;}
+  .vendor-stat{background:#FBF9FF; border:1px solid var(--line); border-radius:9px; padding:9px 10px;}
+  .vendor-stat span{display:block; font-size:10.5px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.05em;}
+  .vendor-stat b{display:block; font-size:13.5px; margin-top:2px;}
+  .vendor-card .vc-footer{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;}
+  .vendor-card .vc-reasons{display:flex; gap:7px; flex-wrap:wrap; flex:1;}
+  .vendor-card .vc-reasons span{font-size:11px; color:var(--ink-soft); background:#F7F5FB; padding:5px 8px; border-radius:999px;}
+  .vendor-card .choose{border:1.5px solid var(--violet); color:var(--violet); background:#fff; border-radius:9px; padding:9px 14px; font-size:12.5px; font-weight:700; transition:.18s; white-space:nowrap;}
+  .vendor-card .choose:hover, .vendor-card.selected .choose{background:var(--grad-primary); color:#fff; border-color:transparent;}
+  .vendor-selected{margin-top:14px; background:#E8FBF4; border:1px solid rgba(0,184,148,.25); border-radius:var(--r-sm); padding:11px 13px; font-size:12.5px; color:#0A7A5E; display:none;}
+  .vendor-selected.show{display:block;}
+  .vendor-empty{padding:18px; border:1px dashed var(--line-strong); border-radius:var(--r-md); text-align:center; color:var(--ink-soft); font-size:13px; background:#FBF9FF;}
+  .quote-note{margin-top:12px; font-size:11.5px; color:var(--ink-soft); line-height:1.5;}
+  @media (max-width:640px){
+    .vendor-card .vc-stats{grid-template-columns:repeat(2,1fr);}
+    .vendor-sort{width:100%;}
+  }
+
   /* ===== Responsive ===== */
   @media (max-width:1240px){
     .order3d{grid-template-columns:1fr 1fr;}
@@ -791,20 +843,44 @@
 
           <!-- 8. Giá dự kiến -->
           <section class="price-box" aria-label="Giá dự kiến">
-            <h4>Giá dự kiến</h4>
+            <h4>Giá tham khảo</h4>
             <div class="row"><span>Vật liệu</span><b id="pMat">—</b></div>
             <div class="row"><span>Thời gian máy</span><b id="pTime">Theo thể tích &amp; lớp in</b></div>
             <div class="row"><span>Gia công &amp; hậu xử lý</span><b id="pPost">Không xử lý</b></div>
             <div class="row"><span>Số lượng</span><b id="pQty">× 1</b></div>
-            <div class="row total"><span>Tạm tính</span><span class="big" id="pTotal">Chờ xác nhận</span></div>
+            <div class="row"><span>Xưởng phù hợp</span><b id="pVendor">Chưa chọn</b></div>
+            <div class="row total"><span>Tạm tính</span><span class="big" id="pTotal">Chờ báo giá</span></div>
             <p class="note">Giá sẽ được xưởng xác nhận sau khi kiểm tra file. Bạn nhận báo giá chi tiết trong vòng 2 giờ làm việc và chỉ thanh toán khi đồng ý.</p>
           </section>
 
-          <!-- 9. Hành động -->
+          <!-- 9. CHỌN XƯỞNG SAU KHI BÁO GIÁ -->
+          <section class="vendor-panel" id="vendorSection" aria-label="Chọn xưởng phù hợp" style="display:none;">
+            <h3>Chọn xưởng phù hợp</h3>
+            <p class="sub">Hệ thống lọc các xưởng có khả năng đáp ứng cấu hình của bạn, sau đó chấm điểm theo độ phù hợp, giá tham khảo, thời gian giao và đánh giá.</p>
+
+            <div class="vendor-recommend" id="vendorRecommend"></div>
+
+            <div class="vendor-toolbar">
+              <span class="vendor-count" id="vendorCount">—</span>
+              <select class="vendor-sort" id="vendorSort" aria-label="Sắp xếp xưởng">
+                <option value="recommended">Đề xuất phù hợp</option>
+                <option value="price">Giá thấp → cao</option>
+                <option value="speed">Giao nhanh → chậm</option>
+                <option value="rating">Đánh giá cao → thấp</option>
+              </select>
+            </div>
+
+            <div class="vendor-list" id="vendorList"></div>
+            <div class="vendor-selected" id="vendorSelected"></div>
+            <p class="quote-note">* Đây là báo giá tham khảo ở giao diện demo dựa trên cấu hình hiện tại. Khi triển khai backend thật, số tiền, năng lực máy, tồn kho vật liệu và thời gian giao sẽ lấy từ báo giá thực tế của từng xưởng.</p>
+          </section>
+
+
+          <!-- 10. Hành động -->
           <div>
             <div class="form-error" id="formError" role="alert"></div>
             <div class="actions">
-              <button type="submit" class="btn-primary">Tiếp tục đặt hàng</button>
+              <button type="submit" class="btn-primary" id="btnContinue">Báo giá &amp; tìm xưởng</button>
               <button type="button" class="btn-secondary" id="btnSave">Lưu cấu hình</button>
             </div>
           </div>
@@ -994,7 +1070,8 @@
     quality:'normal',
     post:['none'],
     tol:'std', tolCustom:null,
-    notes:''
+    notes:'',
+    selectedVendor:null, quoteData:null, quoteSignature:null
   };
 
   const $ = (id) => document.getElementById(id);
@@ -1108,6 +1185,203 @@
       v += (ax*(by*cz - bz*cy) - ay*(bx*cz - bz*cx) + az*(bx*cy - by*cx)) / 6;
     }
     return Math.abs(v);
+  }
+
+
+  /* ============================================================
+     5B. DỮ LIỆU XƯỞNG MẪU + CHẤM ĐIỂM PHÙ HỢP
+     ============================================================ */
+  // Dữ liệu mẫu cho frontend demo — thay bằng API/database thật khi tích hợp backend.
+  const WORKSHOPS = [
+    {id:'alpha', name:'Xưởng Alpha 3D', city:'TP.HCM', rating:4.9, reviews:214, leadDays:2, priceFactor:.96, max:{x:300,y:300,z:400}, precision:.10, techs:['fdm','msla'], materials:['*'], posts:['sanding','paint','gloss','matte','polish','special']},
+    {id:'nova', name:'Xưởng Nova Maker', city:'Hà Nội', rating:4.8, reviews:187, leadDays:3, priceFactor:1.02, max:{x:300,y:300,z:300}, precision:.05, techs:['fdm','sla','msla','dlp'], materials:['*'], posts:['sanding','paint','gloss','matte','polish']},
+    {id:'forge', name:'Xưởng Forge Factory', city:'Đà Nẵng', rating:4.7, reviews:126, leadDays:4, priceFactor:.88, max:{x:380,y:380,z:380}, precision:.10, techs:['fdm','sls','mjf'], materials:['*'], posts:['sanding','paint','matte','special']},
+    {id:'mini', name:'Xưởng MiniLab Resin', city:'TP.HCM', rating:4.9, reviews:98, leadDays:2, priceFactor:1.10, max:{x:218,y:145,z:280}, precision:.03, techs:['sla','msla','dlp'], materials:['*'], posts:['sanding','paint','gloss','matte','polish']},
+    {id:'pro', name:'Xưởng ProFab', city:'Bình Dương', rating:4.8, reviews:153, leadDays:5, priceFactor:.91, max:{x:380,y:300,z:380}, precision:.12, techs:['sls','mjf'], materials:['*'], posts:['sanding','paint','matte','special']}
+  ];
+
+  const MATERIAL_RATES = {
+    pla:360, plap:430, petg:480, abs:520, asa:600, tpu:650, nylon:760, pc:880,
+    'std-resin':980, 'tough-resin':1250, 'abs-resin':1200, 'flex-resin':1450, 'eng-resin':1700,
+    pa12:900, pa11:1050, pa12gf:1200, 'mjf-pa12':1050, 'mjf-pa11':1200, 'mjf-tpu':1450
+  };
+  const TECH_FEES = {fdm:18000, sla:28000, msla:24000, dlp:32000, sls:52000, mjf:65000};
+  const POST_FEES = {none:0, sanding:22000, paint:48000, gloss:26000, matte:26000, polish:38000, special:65000};
+
+  function getTolValue(){
+    if(state.tol === 'custom') return Number(state.tolCustom) || .3;
+    return (TOLERANCES.find(t => t.id === state.tol) || TOLERANCES[0]).value;
+  }
+
+  function configSignature(){
+    const s = finalSize();
+    return JSON.stringify({
+      file:state.file ? state.file.name : null, qty:state.qty, tech:state.tech, material:state.material,
+      quality:state.quality, post:[...state.post].sort(), tol:getTolValue(), size:s ? [s.x,s.y,s.z].map(v => Math.round(v*10)/10) : null
+    });
+  }
+
+  function getBaseQuote(){
+    const s = finalSize();
+    if(!s) return null;
+    const v = finalVolume();
+    const estimatedVolume = v != null ? v : (s.x*s.y*s.z/1000)*.18;
+    const rate = MATERIAL_RATES[state.material] || 700;
+    const q = getQualities().find(x => x.id === state.quality);
+    const qualityFactor = q ? Math.max(.9, 1 + (0.2 - q.layer) * 0.9) : 1;
+    const tolFactor = getTolValue() <= .1 ? 1.22 : getTolValue() <= .2 ? 1.10 : 1;
+    const qtyDiscount = state.qty >= 100 ? .88 : state.qty >= 50 ? .92 : state.qty >= 20 ? .96 : 1;
+    const postUnit = state.post.reduce((sum,id) => sum + (POST_FEES[id] || 0), 0);
+    const machine = TECH_FEES[state.tech] || 30000;
+    const perUnit = Math.max(28000, estimatedVolume * rate * qualityFactor * tolFactor + postUnit);
+    const total = (machine + perUnit * state.qty) * qtyDiscount;
+    return {total, volume:estimatedVolume};
+  }
+
+  function supportsVendor(vendor){
+    const s = finalSize();
+    if(!s || !vendor.techs.includes(state.tech)) return false;
+    if(s.x > vendor.max.x || s.y > vendor.max.y || s.z > vendor.max.z) return false;
+    if(getTolValue() < vendor.precision) return false;
+    if(!vendor.materials.includes('*') && !vendor.materials.includes(state.material)) return false;
+    const posts = state.post.filter(x => x !== 'none');
+    return posts.every(p => vendor.posts.includes(p));
+  }
+
+  function buildVendorQuote(vendor, base){
+    const volume = base.volume;
+    const s = finalSize();
+    const dimensionUtil = Math.max(s.x/vendor.max.x, s.y/vendor.max.y, s.z/vendor.max.z);
+    const sizeBonus = Math.max(0, 8 - dimensionUtil*8);
+    const price = Math.round((base.total * vendor.priceFactor + vendor.leadDays * 3500) / 1000) * 1000;
+
+    let score = 30 + 20 + 15 + 10 + 5; // tech + material + size + tolerance + post
+    score += Math.max(0, Math.min(10, 12 - ((price / Math.max(base.total,1)) - .85) * 40));
+    score += Math.max(0, (vendor.rating - 4) * 5);
+    score += Math.max(0, 5 - vendor.leadDays * .7);
+    score += sizeBonus;
+    score = Math.max(0, Math.min(99, Math.round(score)));
+
+    const reasons = [];
+    if(vendor.techs.includes(state.tech)) reasons.push('Đúng công nghệ');
+    if(vendor.materials.includes('*')) reasons.push('Có vật liệu');
+    if(dimensionUtil < .7) reasons.push('Dư vùng in');
+    else reasons.push('Đủ kích thước');
+    if(getTolValue() <= .1) reasons.push('Đáp ứng dung sai chặt');
+    if(vendor.leadDays <= 2) reasons.push('Giao nhanh');
+    if(price <= base.total) reasons.push('Giá tham khảo tốt');
+    return {...vendor, price, score, reasons};
+  }
+
+  function quoteVendors(){
+    const base = getBaseQuote();
+    if(!base) return [];
+    return WORKSHOPS.filter(supportsVendor).map(v => buildVendorQuote(v, base)).sort((a,b) => b.score-a.score);
+  }
+
+  function vendorById(id){ return (state.quoteData || []).find(v => v.id === id) || null; }
+  const money = n => (Math.round(n/1000)*1000).toLocaleString('vi-VN') + ' đ';
+
+  function syncContinueButton(){
+    const btn = $('btnContinue');
+    if(!btn) return;
+    const validQuote = state.quoteData && state.quoteSignature === configSignature();
+    if(validQuote && state.selectedVendor){
+      const v = vendorById(state.selectedVendor);
+      btn.innerHTML = 'Tiếp tục với ' + (v ? v.name : 'xưởng đã chọn');
+    }else if(validQuote){
+      btn.innerHTML = 'Chọn xưởng để tiếp tục';
+    }else{
+      btn.innerHTML = 'Báo giá &amp; tìm xưởng';
+    }
+  }
+
+  function renderVendorRecommendations(){
+    const base = getBaseQuote();
+    const vendors = quoteVendors();
+    state.quoteData = vendors;
+    state.quoteSignature = configSignature();
+    state.selectedVendor = null;
+
+    $('vendorSection').style.display = 'block';
+    if(!vendors.length){
+      $('vendorRecommend').innerHTML = `<div class="vendor-empty"><strong>Chưa tìm thấy xưởng phù hợp</strong><br>Thử đổi công nghệ, vật liệu, kích thước hoặc nới dung sai/hậu xử lý.</div>`;
+      $('vendorCount').textContent = '0 xưởng tương thích';
+      $('vendorList').innerHTML = '';
+      $('vendorSelected').classList.remove('show');
+      $('pVendor').textContent = 'Chưa có xưởng phù hợp';
+      $('pTotal').textContent = 'Cần điều chỉnh';
+      syncContinueButton();
+      return;
+    }
+
+    const best = vendors[0];
+    $('vendorRecommend').innerHTML = `
+      <div class="top">
+        <div><span class="vendor-badge">⭐ ĐỀ XUẤT TỰ ĐỘNG</span><h4>${best.name}</h4><p>${best.city} · ${best.rating.toFixed(1)}/5 (${best.reviews} đánh giá) · dự kiến ${best.leadDays} ngày</p></div>
+        <div class="vc-score">${best.score}/100</div>
+      </div>
+      <p>Điểm đề xuất được tính từ mức phù hợp công nghệ/vật liệu, kích thước, dung sai, giá tham khảo, thời gian giao và đánh giá.</p>
+      <div class="vendor-why">${best.reasons.slice(0,5).map(x => `<span>✓ ${x}</span>`).join('')}</div>`;
+
+    $('vendorCount').textContent = vendors.length + ' xưởng tương thích';
+    renderVendorList();
+    syncContinueButton();
+    $('vendorSection').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  function renderVendorList(){
+    const arr = [...(state.quoteData || [])];
+    const sort = $('vendorSort').value;
+    if(sort === 'price') arr.sort((a,b) => a.price-b.price);
+    else if(sort === 'speed') arr.sort((a,b) => a.leadDays-b.leadDays);
+    else if(sort === 'rating') arr.sort((a,b) => b.rating-a.rating);
+    else arr.sort((a,b) => b.score-a.score);
+
+    $('vendorList').innerHTML = arr.map(v => `
+      <div class="vendor-card ${v.id === state.selectedVendor ? 'selected ' : ''}${v.id === state.quoteData[0].id ? 'recommended' : ''}" data-vendor="${v.id}">
+        <div class="vc-head">
+          <div><div class="vc-name"><strong>${v.name}</strong>${v.id === state.quoteData[0].id ? '<span class="vendor-badge">Đề xuất</span>' : ''}</div><div class="vc-sub">${v.city} · ${v.techs.map(t => t.toUpperCase()).join(', ')}</div></div>
+          <div class="vc-score">${v.score}/100</div>
+        </div>
+        <div class="vc-stats">
+          <div class="vendor-stat"><span>Giá tham khảo</span><b>${money(v.price)}</b></div>
+          <div class="vendor-stat"><span>Giao dự kiến</span><b>${v.leadDays} ngày</b></div>
+          <div class="vendor-stat"><span>Đánh giá</span><b>★ ${v.rating.toFixed(1)}</b></div>
+          <div class="vendor-stat"><span>Lượt đánh giá</span><b>${v.reviews}</b></div>
+        </div>
+        <div class="vc-footer">
+          <div class="vc-reasons">${v.reasons.slice(0,4).map(x => `<span>✓ ${x}</span>`).join('')}</div>
+          <button type="button" class="choose" data-choose-vendor="${v.id}">${v.id === state.selectedVendor ? '✓ Đã chọn' : 'Chọn xưởng này'}</button>
+        </div>
+      </div>`).join('');
+
+    $('vendorList').querySelectorAll('[data-choose-vendor]').forEach(b => {
+      b.onclick = () => selectVendor(b.dataset.chooseVendor);
+    });
+  }
+
+  function selectVendor(id){
+    const v = vendorById(id);
+    if(!v) return;
+    state.selectedVendor = id;
+    $('pVendor').textContent = v.name;
+    $('pTotal').textContent = money(v.price);
+    $('vendorSelected').innerHTML = `<strong>Đã chọn ${v.name}</strong> · ${money(v.price)} · dự kiến ${v.leadDays} ngày. Nhấn “Tiếp tục” để gửi yêu cầu tới xưởng này.`;
+    $('vendorSelected').classList.add('show');
+    renderVendorList();
+    syncContinueButton();
+    toastOk('Đã chọn ' + v.name);
+  }
+
+  function resetInvalidQuote(){
+    if(state.quoteSignature && state.quoteSignature !== configSignature()){
+      state.quoteData = null; state.quoteSignature = null; state.selectedVendor = null;
+      $('vendorSection').style.display = 'none';
+      $('vendorSelected').classList.remove('show');
+      $('pVendor').textContent = 'Chưa chọn';
+    }
+    syncContinueButton();
   }
 
   /* ============================================================
@@ -1554,6 +1828,7 @@
   }
 
   function update(){
+    resetInvalidQuote();
     const s = finalSize(), v = finalVolume();
 
     // kích thước hiển thị
@@ -1589,6 +1864,21 @@
     $('pPost').textContent = postText();
     $('pQty').textContent = '× ' + state.qty;
 
+    const validQuote = state.quoteData && state.quoteSignature === configSignature();
+    const selected = validQuote ? vendorById(state.selectedVendor) : null;
+    if(selected){
+      $('pVendor').textContent = selected.name;
+      $('pTotal').textContent = money(selected.price);
+    }else if(validQuote && state.quoteData.length){
+      const prices = state.quoteData.map(x => x.price);
+      $('pVendor').textContent = 'Chưa chọn';
+      $('pTotal').textContent = money(Math.min(...prices)) + ' – ' + money(Math.max(...prices));
+    }else{
+      $('pVendor').textContent = 'Chưa chọn';
+      $('pTotal').textContent = 'Chờ báo giá';
+    }
+
+    syncContinueButton();
     runChecks();
   }
 
@@ -1619,6 +1909,36 @@
     return errs;
   }
 
+  function finalizeOrder(){
+    const v = vendorById(state.selectedVendor);
+    if(!v){
+      toastErr('Vui lòng chọn một xưởng trước khi tiếp tục.');
+      $('vendorSection').scrollIntoView({behavior:'smooth', block:'start'});
+      return;
+    }
+
+    const s = finalSize();
+    $('orderCode').textContent = '#3D-' + Math.floor(100000 + Math.random()*900000);
+    $('confirmSummary').innerHTML = [
+      ['Mô hình', state.file.name],
+      ['Xưởng đã chọn', `${v.name} · ${v.city}`],
+      ['Điểm phù hợp', `${v.score}/100`],
+      ['Báo giá tham khảo', money(v.price)],
+      ['Thời gian dự kiến', `${v.leadDays} ngày`],
+      ['Số lượng', state.qty],
+      ['Kích thước', s ? `${fmt(s.x)} × ${fmt(s.y)} × ${fmt(s.z)} mm` : 'Xưởng xác nhận'],
+      ['Công nghệ', getTech().name],
+      ['Vật liệu', matName()],
+      ['Màu', state.colorName],
+      ['Chất lượng', qualityText()],
+      ['Xử lý bề mặt', postText()],
+      ['Dung sai', tolText()]
+    ].map(([k,v]) => `<div class="sum-row"><span>${k}</span><b>${v}</b></div>`).join('');
+
+    $('confirmModal').classList.add('show');
+    toastOk('Đã chọn xưởng và tạo yêu cầu in');
+  }
+
   function submit(e){
     e.preventDefault();
     const errs = validate();
@@ -1632,22 +1952,20 @@
     }
     box.className = 'form-error';
 
-    const s = finalSize();
-    $('orderCode').textContent = '#3D-' + Math.floor(100000 + Math.random()*900000);
-    $('confirmSummary').innerHTML = [
-      ['Mô hình', state.file.name],
-      ['Số lượng', state.qty],
-      ['Kích thước', s ? `${fmt(s.x)} × ${fmt(s.y)} × ${fmt(s.z)} mm` : 'Xưởng xác nhận'],
-      ['Công nghệ', getTech().name],
-      ['Vật liệu', matName()],
-      ['Màu', state.colorName],
-      ['Chất lượng', qualityText()],
-      ['Xử lý bề mặt', postText()],
-      ['Dung sai', tolText()]
-    ].map(([k,v]) => `<div class="sum-row"><span>${k}</span><b>${v}</b></div>`).join('');
+    const validQuote = state.quoteData && state.quoteSignature === configSignature();
+    if(!validQuote){
+      renderVendorRecommendations();
+      $('pTime').textContent = qualityText() + ' · đã tính theo cấu hình';
+      return;
+    }
 
-    $('confirmModal').classList.add('show');
-    toastOk('Đã gửi yêu cầu in');
+    if(!state.selectedVendor){
+      toastErr('Hãy chọn một xưởng phù hợp trước khi tiếp tục.');
+      $('vendorSection').scrollIntoView({behavior:'smooth', block:'start'});
+      return;
+    }
+
+    finalizeOrder();
   }
 
   function saveConfig(){
@@ -1752,6 +2070,7 @@
   // Gửi / lưu
   $('orderForm').onsubmit = submit;
   $('btnSave').onclick = saveConfig;
+  $('vendorSort').onchange = renderVendorList;
 
   // Modal
   $('confirmModal').querySelectorAll('[data-close]').forEach(b => b.onclick = () => $('confirmModal').classList.remove('show'));
@@ -1763,6 +2082,7 @@
      ============================================================ */
   renderTech(); renderMaterials(); renderQuality(); renderColors(); renderPost(); renderTol();
   syncSizeMode(); update();
+  syncContinueButton();
 
   if(!Viewer.available()){
     $('stageEmpty').querySelector('p').textContent = 'Không tải được thư viện 3D. Bạn vẫn đặt in được — nhập kích thước mong muốn ở mục “Kích thước sản phẩm”.';
